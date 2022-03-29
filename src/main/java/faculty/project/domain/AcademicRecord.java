@@ -5,4 +5,5 @@ public class AcademicRecord {
     private int year;
     private Subject subject;
     private Student student;
+    private Teacher signedBy;
 }

@@ -21,7 +21,4 @@ public class User {
 
     }
 
-    public void authenticate(String login, String password){
-
-    }
 }

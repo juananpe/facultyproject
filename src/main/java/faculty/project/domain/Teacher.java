@@ -9,11 +9,5 @@ public class Teacher extends User {
         super();
     }
 
-    public void consultStudentsRecords(){
 
-    }
-
-    public void gradeStudents(){
-
-    }
 }

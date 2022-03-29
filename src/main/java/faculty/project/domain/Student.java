@@ -11,13 +11,6 @@ public class Student extends User {
         super(userName, password, completeName, email, address, phoneNumber);
     }
 
-    public int getEarnedCredits() {
-        return earnedCredits;
-    }
-
-    public void setEarnedCredits(int earnedCredits) {
-        this.earnedCredits = earnedCredits;
-    }
 
     public Collection<Subject> getEnrolledIn() {
         return enrolledIn;
@@ -27,7 +20,15 @@ public class Student extends User {
         this.enrolledIn.add(subject);
     }
 
-    public void consultOwnRecords(){
+    public int getEarnedCredits() {
+        return earnedCredits;
+    }
 
+    public void setEarnedCredits(int earnedCredits) {
+        this.earnedCredits = earnedCredits;
+    }
+
+    public Collection<AcademicRecord> getAcademicRecords() {
+        return academicRecords;
     }
 }
