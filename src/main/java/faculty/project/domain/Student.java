@@ -17,7 +17,8 @@ public class Student extends User {
     }
 
     public void enroll(Subject subject){
-        this.enrolledIn.add(subject);
+        enrolledIn.add(subject);
+        academicRecords.add(new AcademicRecord(subject, this));
     }
 
     public int getEarnedCredits() {

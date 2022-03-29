@@ -7,6 +7,7 @@ public class Subject {
     private int numCredits;
     private int maxNumStudents;
 
+
     public Subject(String name, int numCredits, int maxNumStudents) {
         this.name = name;
         this.numCredits = numCredits;
