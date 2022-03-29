@@ -13,6 +13,5 @@ public class AcademicRecord {
         this.subject = subject;
         this.student = student;
         year = Calendar.getInstance().get(Calendar.YEAR);
-        System.out.println(year);
     }
 }

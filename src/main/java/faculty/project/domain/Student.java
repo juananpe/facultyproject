@@ -1,5 +1,6 @@
 package faculty.project.domain;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 public class Student extends User {
@@ -9,6 +10,9 @@ public class Student extends User {
 
     public Student(String userName, String password, String completeName, String email, String address, String phoneNumber) {
         super(userName, password, completeName, email, address, phoneNumber);
+
+        enrolledIn = new ArrayList<>();
+        academicRecords = new ArrayList<>();
     }
 
 
