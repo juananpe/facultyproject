@@ -2,9 +2,12 @@
 
     import faculty.project.configuration.ConfigXML;
     import faculty.project.configuration.UtilDate;
+		import faculty.project.domain.Student;
+		import faculty.project.domain.Subject;
+		import faculty.project.domain.Teacher;
 
 
-    import javax.persistence.EntityManager;
+		import javax.persistence.EntityManager;
     import javax.persistence.EntityManagerFactory;
     import javax.persistence.Persistence;
     import javax.persistence.TypedQuery;
@@ -35,21 +38,29 @@ public class DataAccess  {
 
 		db.getTransaction().begin();
 
-		try {
+		Student oihane = new Student("Oihane", "123456", "Oihane Soraluze",
+				"oihane@email.com", "c/ Melancolía 13", "678012345");
 
-			Calendar today = Calendar.getInstance();
-			int month = today.get(Calendar.MONTH);
-			month += 1;
-			int year = today.get(Calendar.YEAR);
-			if (month == 12) { month = 0; year += 1;}
+		Student aitor = new Student("Aitor", "123456", "Aitor Sarriegi",
+				"aitor@email.com", "c/ Esperanza 14", "678999999");
+
+		Subject softwareEngineering = new Subject("Software Engineering", 6, 50);
+
+		oihane.enroll(softwareEngineering);
+		aitor.enroll(softwareEngineering);
 
 
-			db.getTransaction().commit();
-			System.out.println("The database has been initialized");
-		}
-		catch (Exception e){
-			e.printStackTrace();
-		}
+		Teacher juanan= new Teacher(230, "+34-123456");
+		juanan.add(softwareEngineering);
+
+		db.persist(softwareEngineering);
+		db.persist(oihane);
+		db.persist(aitor);
+		db.persist(juanan);
+
+		db.getTransaction().commit();
+		System.out.println("The database has been initialized");
+
 	}
 
 

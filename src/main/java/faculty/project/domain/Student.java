@@ -1,12 +1,18 @@
 package faculty.project.domain;
 
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Entity
 public class Student extends User {
+
     private int earnedCredits;
     private Collection<Subject> enrolledIn;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Collection<AcademicRecord> academicRecords;
+
 
     public Student(String userName, String password, String completeName, String email, String address, String phoneNumber) {
         super(userName, password, completeName, email, address, phoneNumber);
