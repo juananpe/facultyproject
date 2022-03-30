@@ -1,8 +1,13 @@
 package faculty.project.businessLogic;
 
 
+import faculty.project.domain.Student;
 import faculty.project.domain.Subject;
 import faculty.project.domain.Teacher;
+import faculty.project.domain.User;
+import faculty.project.exceptions.UnknownUser;
+
+import java.util.List;
 
 /**
  * Interface that specifies the business logic.
@@ -10,19 +15,29 @@ import faculty.project.domain.Teacher;
 public interface BlFacade {
 
   /**************** Teacher *******************/
-  public void consultStudentsRecords();
+  void consultStudentsRecords();
 
   /**
    *
    * @param subject the subject is from this academic course
    */
 
-  public void gradeStudents(Teacher teacher, Subject subject);
+  void gradeStudents(Teacher teacher, Subject subject);
 
   /***  Academic Officer ***/
-  public void restartSystem();
+  void restartSystem();
 
   /*** User ***/
-  public void authenticate(String login, String password);
+  void authenticate(String login, String password);
+
+  /**
+   * Get subjects for current teacher
+   */
+  List<Subject> getSubjects();
+  void setCurrentUser(User user);
+  void login(String username, String password) throws UnknownUser;
+
+
+  List<Student> getStudentsEnrolledIn(Subject subject);
 
 }

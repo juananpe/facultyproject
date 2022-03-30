@@ -5,6 +5,8 @@
 		import faculty.project.domain.Student;
 		import faculty.project.domain.Subject;
 		import faculty.project.domain.Teacher;
+		import faculty.project.domain.User;
+		import faculty.project.exceptions.UnknownUser;
 
 
 		import javax.persistence.EntityManager;
@@ -50,7 +52,7 @@ public class DataAccess  {
 		aitor.enroll(softwareEngineering);
 
 
-		Teacher juanan= new Teacher(230, "+34-123456");
+		Teacher juanan= new Teacher(230, "+34-123456", "juanan", "pasahitza");
 		juanan.add(softwareEngineering);
 
 		db.persist(softwareEngineering);
@@ -65,6 +67,9 @@ public class DataAccess  {
 
 
 
+	public void open(){
+		open(false);
+	}
 
 	public void open(boolean initializeMode){
 
@@ -96,5 +101,28 @@ public class DataAccess  {
 	public void close(){
 		db.close();
 		System.out.println("DataBase is closed");
+	}
+
+
+	public User login(String username, String password) throws UnknownUser {
+		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.userName =?1 AND u.password =?2",
+				User.class);
+		query.setParameter(1, username);
+		query.setParameter(2, password);
+		User user  = query.getSingleResult();
+		return user;
+	}
+
+	public List<Student> getStudentsEnrolledIn(Subject subject) {
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+		List<Student> students;
+		TypedQuery<Student> query = db.createQuery("SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.year =?2", /* AND ar.grade is null (if you only want these)*/
+				Student.class);
+		query.setParameter(1, subject);
+		query.setParameter(2, currentYear);
+		students = query.getResultList();
+		return students;
+
 	}
 }

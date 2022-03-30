@@ -13,8 +13,15 @@ public class Subject {
     private int numCredits;
     private int maxNumStudents;
 
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private Collection<Subject> preRequisites;
+
     @OneToOne
     private Teacher teacher;
+
+    public Subject() {
+
+    }
 
     public Teacher getTeacher() {
         return teacher;
@@ -62,7 +69,6 @@ public class Subject {
         this.preRequisites = preRequisites;
     }
 
-    private Collection<Subject> preRequisites;
 
     public Long getId() {
         return id;
@@ -70,5 +76,13 @@ public class Subject {
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Subject{" +
+            "name='" + name + '\'' +
+            ", teacher=" + teacher +
+            '}';
     }
 }

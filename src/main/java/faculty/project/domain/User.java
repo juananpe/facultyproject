@@ -26,6 +26,22 @@ public class User {
         this.id = id;
     }
 
+    public User(String userName, String password) {
+        this.userName = userName;
+        this.password = password;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+            "userName='" + userName + '\'' +
+            '}';
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
     public User(String userName, String password, String completeName, String email, String address, String phoneNumber) {
         this.userName = userName;
         this.password = password;

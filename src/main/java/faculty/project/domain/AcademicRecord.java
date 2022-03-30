@@ -19,6 +19,10 @@ public class AcademicRecord {
     @OneToOne
     private Teacher signedBy;
 
+    public AcademicRecord() {
+
+    }
+
     public Long getId() {
         return id;
     }

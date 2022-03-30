@@ -1,6 +1,7 @@
 package faculty.project.ui;
 
 import faculty.project.businessLogic.BlFacade;
+import faculty.project.controllers.GradingController;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -15,7 +16,7 @@ import java.util.ResourceBundle;
 
 public class MainGUI {
 
-  private Window loginWin;
+  private Window loginWin, gradingWin;
 
   private BlFacade businessLogic;
   private Stage stage;
@@ -51,9 +52,9 @@ public class MainGUI {
     FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxmlfile) /*, ResourceBundle.getBundle("Etiquetas", Locale.getDefault())*/ );
     loader.setControllerFactory(controllerClass -> {
 
-//      if (controllerClass == BrowseQuestionsController.class) {
-//        return new BrowseQuestionsController(businessLogic);
-//      }  else {
+      if (controllerClass == GradingController.class) {
+        return new GradingController(businessLogic);
+      }  else {
         // default behavior for controllerFactory:
         try {
           return controllerClass.getDeclaredConstructor().newInstance();
@@ -62,7 +63,7 @@ public class MainGUI {
           throw new RuntimeException(exc); // fatal, just bail...
         }
 
-
+      }
 
     });
     window.ui = loader.load();
@@ -76,13 +77,17 @@ public class MainGUI {
     this.stage = stage;
 
     loginWin = load("/login.fxml");
+    gradingWin = load("/grading.fxml");
 
-    showLogin();
+    showGrading();
 
   }
 
   public void showLogin(){
     setupScene(loginWin.ui, "Login", 480, 320);
+  }
+  public void showGrading(){
+    setupScene(gradingWin.ui, "Grading", 520, 420);
   }
 
   private void setupScene(Parent ui, String title, int width, int height) {

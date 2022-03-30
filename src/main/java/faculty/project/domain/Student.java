@@ -8,6 +8,8 @@ import java.util.Collection;
 public class Student extends User {
 
     private int earnedCredits;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Collection<Subject> enrolledIn;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -19,6 +21,10 @@ public class Student extends User {
 
         enrolledIn = new ArrayList<>();
         academicRecords = new ArrayList<>();
+    }
+
+    public Student() {
+
     }
 
 
@@ -42,4 +48,5 @@ public class Student extends User {
     public Collection<AcademicRecord> getAcademicRecords() {
         return academicRecords;
     }
+
 }

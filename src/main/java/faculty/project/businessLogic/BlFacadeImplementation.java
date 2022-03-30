@@ -5,12 +5,22 @@ import faculty.project.dataAccess.DataAccess;
 import faculty.project.domain.Student;
 import faculty.project.domain.Subject;
 import faculty.project.domain.Teacher;
+import faculty.project.domain.User;
+import faculty.project.exceptions.UnknownUser;
+
+import javax.persistence.CascadeType;
+import javax.persistence.FetchType;
+import javax.persistence.OneToMany;
+import java.util.Date;
+import java.util.List;
+import java.util.Vector;
 
 public class BlFacadeImplementation implements BlFacade {
 
   DataAccess dbManager;
   ConfigXML config = ConfigXML.getInstance();
 
+  private User currentUser;
 
   public BlFacadeImplementation() {
 
@@ -20,6 +30,14 @@ public class BlFacadeImplementation implements BlFacade {
     if (initialize)
       dbManager.initializeDB();
     dbManager.close();
+
+    // hardcode current user for testing purposes
+    try {
+      login("juanan","pasahitza");
+    } catch (UnknownUser e) {
+      e.printStackTrace();
+    }
+
   }
 
 
@@ -46,6 +64,36 @@ public class BlFacadeImplementation implements BlFacade {
   @Override
   public void authenticate(String login, String password) {
 
+  }
+
+  @Override
+  public List<Subject> getSubjects() {
+      Teacher teacher = (Teacher) this.currentUser;
+      return teacher.getSubjects();
+  }
+
+  @Override
+  public void setCurrentUser(User user) {
+    this.currentUser = user;
+  }
+
+  public void login(String username, String password) throws UnknownUser {
+    User user;
+
+    dbManager.open();
+    user = dbManager.login(username, password);
+    dbManager.close();
+
+    this.currentUser = user;
+  }
+
+  @Override
+  public List<Student> getStudentsEnrolledIn(Subject subject) {
+    List<Student> students;
+    dbManager.open();
+    students = dbManager.getStudentsEnrolledIn(subject);
+    dbManager.close();
+    return students;
   }
 
 }
