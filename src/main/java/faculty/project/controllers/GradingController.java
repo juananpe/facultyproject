@@ -14,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.util.StringConverter;
 
@@ -39,6 +40,10 @@ public class GradingController implements Controller {
 
   @FXML
   private TextField grade;
+
+  @FXML
+  private Label lblMessage;
+
   private MainGUI mainGUI;
 
   ObservableList<Subject> subjects = FXCollections.observableArrayList();
@@ -83,7 +88,7 @@ public class GradingController implements Controller {
       if(subject != null) {
         System.out.println("Selected subject: " + subject.getName());
         // get all students enrolled in this subject
-        List<Student> studentList = bl.getStudentsEnrolledIn(subject);
+        List<Student> studentList = bl.getUngradedStudentsEnrolledIn(subject);
         students.setAll(studentList);
         comboStudents.setItems(students);
       }
@@ -96,9 +101,28 @@ public class GradingController implements Controller {
 
   @FXML
   void setGrade(ActionEvent event) {
-    System.out.println(comboSubjects.getSelectionModel().getSelectedItem());
-    System.out.println(comboStudents.getSelectionModel().getSelectedItem());
-    System.out.println(grade.getText());
+    Subject subject = comboSubjects.getSelectionModel().getSelectedItem();
+    Student student = comboStudents.getSelectionModel().getSelectedItem();
+    float gradeValue;
+    try {
+      gradeValue = Float.parseFloat(grade.getText());
+    }catch (Exception e){
+      gradeValue = -1;
+    }
+
+    if (subject == null || student == null || gradeValue < 0 || gradeValue > 10){
+      lblMessage.setText("Some of the parameters are wrong");
+      lblMessage.getStyleClass().setAll("lbl","lbl-danger");
+    }else {
+      if (bl.gradeStudent(student, subject, gradeValue)) {
+        students.remove(student);
+        lblMessage.setText("Grade Updated");
+        lblMessage.getStyleClass().setAll("lbl", "lbl-success");
+      } else {
+        lblMessage.setText("Something went wrong");
+        lblMessage.getStyleClass().setAll("lbl", "lbl-danger");
+      }
+    }
   }
 
   @Override

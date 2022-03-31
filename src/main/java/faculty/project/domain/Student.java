@@ -7,7 +7,7 @@ import java.util.Collection;
 @Entity
 public class Student extends User {
 
-    private int earnedCredits;
+    private int earnedCredits = 0;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Collection<Subject> enrolledIn;

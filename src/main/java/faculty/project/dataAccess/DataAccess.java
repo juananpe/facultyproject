@@ -1,11 +1,7 @@
 	package faculty.project.dataAccess;
 
     import faculty.project.configuration.ConfigXML;
-    import faculty.project.configuration.UtilDate;
-		import faculty.project.domain.Student;
-		import faculty.project.domain.Subject;
-		import faculty.project.domain.Teacher;
-		import faculty.project.domain.User;
+		import faculty.project.domain.*;
 		import faculty.project.exceptions.UnknownUser;
 
 
@@ -113,16 +109,59 @@ public class DataAccess  {
 		return user;
 	}
 
-	public List<Student> getStudentsEnrolledIn(Subject subject) {
+	public List<Student> getUngradedStudentsEnrolledIn(Subject subject) {
 		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
 		List<Student> students;
-		TypedQuery<Student> query = db.createQuery("SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.year =?2", /* AND ar.grade is null (if you only want these)*/
+		TypedQuery<Student> query = db.createQuery(
+				"SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.year =?2 AND ar.signedBy is null",
 				Student.class);
 		query.setParameter(1, subject);
 		query.setParameter(2, currentYear);
 		students = query.getResultList();
 		return students;
+
+	}
+
+	/**
+	 *   Add the grade (if passed -> update the earnedCredits value of the student)
+	 *   sign the record
+	 * @param student
+	 * @param subject
+	 * @param grade
+	 * @param teacher
+	 * @return successfully updated
+	 *
+	 */
+	public boolean gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
+
+		boolean ok = true;
+
+		int currentYear = Calendar.getInstance().get(Calendar.YEAR);
+
+		TypedQuery<AcademicRecord> query = db.createQuery("UPDATE AcademicRecord ar SET ar.grade=?1, ar.signedBy=?2 WHERE ar.student=?3 AND ar.year =?4 AND ar.subject=?5",
+				AcademicRecord.class);
+
+		query.setParameter(1, grade);
+		query.setParameter(2, teacher);
+		query.setParameter(3, student);
+		query.setParameter(4, currentYear);
+		query.setParameter(5, subject);
+
+		db.getTransaction().begin();
+		int updateCount = query.executeUpdate();
+		if (updateCount==1){
+			if (grade >= 5) {
+				Student st = db.find(Student.class, student.getId());
+				// update the earnedCredits value of the student
+				st.setEarnedCredits(student.getEarnedCredits() + subject.getNumCredits());
+			}
+		}else{
+			ok = false;
+		}
+		db.getTransaction().commit();
+
+		return ok;
 
 	}
 }

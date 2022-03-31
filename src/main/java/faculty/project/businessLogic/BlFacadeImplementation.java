@@ -8,12 +8,7 @@ import faculty.project.domain.Teacher;
 import faculty.project.domain.User;
 import faculty.project.exceptions.UnknownUser;
 
-import javax.persistence.CascadeType;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
-import java.util.Date;
 import java.util.List;
-import java.util.Vector;
 
 public class BlFacadeImplementation implements BlFacade {
 
@@ -47,13 +42,16 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   @Override
-  public void gradeStudents(Teacher teacher, Subject subject) {
-    // each Subject has an assigned teacher, so we can start from Subject
-    // query the DB, asking for all the academic records (students) of this year and Subject
-    // now, for each student of the subject, get her academicRecord for this year and subject
-    //      add the grade (if passed -> update the earnedCredits value of the student)
-    //      sign the record
+  public boolean gradeStudent(Student student, Subject subject, float grade) {
 
+    Teacher teacher = (Teacher) this.currentUser;
+    dbManager.open();
+
+    boolean ok = dbManager.gradeStudent(student, subject, grade, teacher);
+
+    dbManager.close();
+
+    return ok;
   }
 
   @Override
@@ -88,10 +86,10 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   @Override
-  public List<Student> getStudentsEnrolledIn(Subject subject) {
+  public List<Student> getUngradedStudentsEnrolledIn(Subject subject) {
     List<Student> students;
     dbManager.open();
-    students = dbManager.getStudentsEnrolledIn(subject);
+    students = dbManager.getUngradedStudentsEnrolledIn(subject);
     dbManager.close();
     return students;
   }

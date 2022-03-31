@@ -19,7 +19,8 @@
             <Font size="31.0" />
          </font>
       </Label>
-      <Button layoutX="229.0" layoutY="314.0" mnemonicParsing="false" onAction="#setGrade" text="Set grade" />
+      <Button layoutX="207.0" layoutY="313.0" mnemonicParsing="false" onAction="#setGrade" text="Set grade" />
       <ComboBox fx:id="comboSubjects" layoutX="176.0" layoutY="107.0" prefWidth="150.0" />
+      <Label fx:id="lblMessage" layoutX="213.0" layoutY="275.0" text=" " />
    </children>
 </AnchorPane>
