@@ -116,7 +116,8 @@ public class GradingController implements Controller {
     }else {
       if (bl.gradeStudent(student, subject, gradeValue)) {
         students.remove(student);
-        lblMessage.setText("Grade Updated");
+        grade.setText("");
+        lblMessage.setText("Grade Updated: " + student.getUserName() + ":" + gradeValue);
         lblMessage.getStyleClass().setAll("lbl", "lbl-success");
       } else {
         lblMessage.setText("Something went wrong");
