@@ -84,6 +84,11 @@ public class GradingController implements Controller {
       }
     });
 
+    comboStudents.valueProperty().addListener((obs, oldval, subject) -> {
+      lblMessage.setText("");
+      lblMessage.getStyleClass().clear();
+    });
+
     comboSubjects.valueProperty().addListener((obs, oldval, subject) -> {
       if(subject != null) {
         System.out.println("Selected subject: " + subject.getName());
