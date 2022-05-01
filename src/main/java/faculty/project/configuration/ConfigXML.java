@@ -18,7 +18,7 @@ import java.net.URL;
  */
 public class ConfigXML {
 
-	private static final String CONFIGURATION_FILENAME = "resources/config.xml";
+	private static final String CONFIGURATION_FILENAME = "config/config.xml";
 
 	public static ConfigXML getInstance() {
 		return theInstance;

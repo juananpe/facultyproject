@@ -1,19 +1,39 @@
 package faculty.project.domain;
 
-public class Teacher extends User {
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
+@Entity
+public class Teacher extends User {
     private Integer officeNumber;
     private String corporatePhone;
+
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    private List<Subject> teaches = new ArrayList<>();
 
     public Teacher(int officeNumber, String corporatePhone){
         super();
     }
 
-    public void consultStudentsRecords(){
+    public Teacher(int officeNumber, String corporatePhone, String username, String password){
+        super(username, password);
+    }
+
+    public Teacher() {
 
     }
 
-    public void gradeStudents(){
-
+    public List<Subject> getSubjects() {
+        return teaches;
     }
+
+    public void add(Subject subject){
+        teaches.add(subject);
+        subject.setTeacher(this);
+    }
+
+
 }

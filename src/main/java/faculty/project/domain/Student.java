@@ -1,33 +1,43 @@
 package faculty.project.domain;
 
+import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.Collection;
 
+@Entity
 public class Student extends User {
-    private int earnedCredits;
-    private Collection<Subject> enrolledIn;
-    private Collection<AcademicRecord> academicRecords;
 
-    public Student(String userName, String password, String completeName, String email, String address, String phoneNumber) {
-        super(userName, password, completeName, email, address, phoneNumber);
-    }
+  private int earnedCredits = 0;
 
-    public int getEarnedCredits() {
-        return earnedCredits;
-    }
+  @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  private Collection<AcademicRecord> academicRecords;
 
-    public void setEarnedCredits(int earnedCredits) {
-        this.earnedCredits = earnedCredits;
-    }
 
-    public Collection<Subject> getEnrolledIn() {
-        return enrolledIn;
-    }
+  public Student(String userName, String password, String completeName, String email, String address, String phoneNumber) {
+    super(userName, password, completeName, email, address, phoneNumber);
 
-    public void enroll(Subject subject){
-        this.enrolledIn.add(subject);
-    }
+    academicRecords = new ArrayList<>();
+  }
 
-    public void consultOwnRecords(){
+  public Student() {
 
-    }
+  }
+
+
+  public void enroll(Subject subject) {
+    academicRecords.add(new AcademicRecord(subject, this));
+  }
+
+  public int getEarnedCredits() {
+    return earnedCredits;
+  }
+
+  public void setEarnedCredits(int earnedCredits) {
+    this.earnedCredits = earnedCredits;
+  }
+
+  public Collection<AcademicRecord> getAcademicRecords() {
+    return academicRecords;
+  }
+
 }
