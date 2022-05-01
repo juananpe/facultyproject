@@ -94,4 +94,20 @@ public class BlFacadeImplementation implements BlFacade {
     return students;
   }
 
+  @Override
+  public List<Subject> getAllSubjects() {
+    List<Subject> subjects;
+    dbManager.open();
+    subjects = dbManager.getAllSubjects();
+    dbManager.close();
+    return subjects;
+  }
+
+  @Override
+  public void assign(Subject subject, Teacher teacher) {
+    dbManager.open();
+    dbManager.assign(subject, teacher);
+    dbManager.close();
+  }
+
 }

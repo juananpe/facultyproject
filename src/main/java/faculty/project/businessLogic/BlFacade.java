@@ -3,6 +3,7 @@ package faculty.project.businessLogic;
 
 import faculty.project.domain.Student;
 import faculty.project.domain.Subject;
+import faculty.project.domain.Teacher;
 import faculty.project.domain.User;
 import faculty.project.exceptions.UnknownUser;
 
@@ -34,5 +35,8 @@ public interface BlFacade {
 
   List<Student> getUngradedStudentsEnrolledIn(Subject subject);
 
+  List<Subject> getAllSubjects();
 
-}
+  void assign(Subject subject, Teacher teacher);
+
+  }

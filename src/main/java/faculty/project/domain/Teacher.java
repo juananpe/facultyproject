@@ -36,4 +36,15 @@ public class Teacher extends User {
     }
 
 
+    public List<Subject> clearSubjects(){
+        List<Subject> subjects = new ArrayList<>();
+        for (Subject subject : teaches) {
+            subject.setTeacher(null);
+            subjects.add(subject);
+        }
+        teaches.clear();
+        return subjects;
+    }
+
+
 }

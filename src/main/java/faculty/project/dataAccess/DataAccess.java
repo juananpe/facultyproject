@@ -100,6 +100,28 @@ public class DataAccess  {
 	}
 
 
+	public List<Teacher> removeTeachingAssignments(){
+
+		TypedQuery<Teacher> query = db.createQuery("SELECT t FROM Teacher t",
+				Teacher.class);
+		List<Teacher> teachers  = query.getResultList();
+		for (Teacher teacher : teachers) {
+			db.getTransaction().begin();
+			teacher.clearSubjects();
+			db.getTransaction().commit();
+		}
+
+		return teachers;
+	}
+
+	public List<Subject> getAllSubjects(){
+		TypedQuery<Subject> query = db.createQuery("SELECT s FROM Subject s",
+				Subject.class);
+		List<Subject> subjects  = query.getResultList();
+		return subjects;
+	}
+
+
 	public User login(String username, String password) throws UnknownUser {
 		TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.userName =?1 AND u.password =?2",
 				User.class);
@@ -164,4 +186,21 @@ public class DataAccess  {
 		return ok;
 
 	}
+
+	public void assign(Subject subject, Teacher teacher) {
+		db.getTransaction().begin();
+		teacher.add(subject);
+		db.getTransaction().commit();
+	}
+
+	public static void main(String[] args) {
+		// Testing...
+		DataAccess da = new DataAccess(true);
+		da.initializeDB();
+		List<Teacher> allTeachers = da.removeTeachingAssignments();
+		List<Subject> allSubjects = da.getAllSubjects();
+		da.assign(allSubjects.get(0), allTeachers.get(0));
+	}
+
+
 }
