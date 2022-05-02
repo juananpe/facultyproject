@@ -45,7 +45,7 @@ public class Subject {
         this.name = name;
     }
 
-    public int getNumCredits() {
+    public int getCreditNumber() {
         return numCredits;
     }
 

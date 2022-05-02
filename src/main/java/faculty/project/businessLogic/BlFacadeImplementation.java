@@ -8,6 +8,7 @@ import faculty.project.domain.Teacher;
 import faculty.project.domain.User;
 import faculty.project.exceptions.UnknownUser;
 
+import java.util.Collection;
 import java.util.List;
 
 public class BlFacadeImplementation implements BlFacade {
@@ -107,6 +108,35 @@ public class BlFacadeImplementation implements BlFacade {
   public void assign(Subject subject, Teacher teacher) {
     dbManager.open();
     dbManager.assign(subject, teacher);
+    dbManager.close();
+  }
+
+  @Override
+  public boolean isEligible(Subject subject) {
+
+    boolean eligible;
+    Student currentStudent = (Student)currentUser;
+    dbManager.open();
+    eligible = !dbManager.isFull(subject);
+    Collection<Subject> prereq = subject.getPreRequisites();
+    prereq.add(subject); // we want to check not only if the student has passed the prerequisites but also if s/he has passed the actual subject before!
+    for (Subject sub : prereq) {
+      eligible = eligible && dbManager.hasPassed(sub, currentStudent);
+    }
+    int tcr = subject.getCreditNumber(); // total credits
+    eligible = eligible && currentStudent.isEligibleForCredits(tcr);
+    dbManager.close();
+
+    return eligible;
+  }
+
+  @Override
+  public void enrol(List<Subject> subjects) {
+    Student currentStudent = (Student)currentUser;
+    dbManager.open();
+    for (Subject subject : subjects) {
+      dbManager.enrol(currentStudent, subject);
+    }
     dbManager.close();
   }
 

@@ -39,4 +39,8 @@ public interface BlFacade {
 
   void assign(Subject subject, Teacher teacher);
 
+  boolean isEligible(Subject subject);
+
+  void enrol(List<Subject> subjects);
+
   }

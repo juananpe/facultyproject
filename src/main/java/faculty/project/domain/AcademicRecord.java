@@ -9,14 +9,14 @@ public class AcademicRecord {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    private float grade;
+    private Float grade;
     private int year;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Subject subject;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Student student;
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     private Teacher signedBy;
 
     public AcademicRecord() {

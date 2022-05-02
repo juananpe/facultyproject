@@ -7,6 +7,7 @@ import java.util.Collection;
 @Entity
 public class Student extends User {
 
+  private static final int MAXCREDITSDEGREE = 255;
   private int earnedCredits = 0;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
@@ -38,6 +39,11 @@ public class Student extends User {
 
   public Collection<AcademicRecord> getAcademicRecords() {
     return academicRecords;
+  }
+
+  public boolean isEligibleForCredits(int credits){
+    // the credits a student has already passed in previous years, cannot exceed the maximum number of credits of the degree (255).
+    return getEarnedCredits() + credits <= MAXCREDITSDEGREE;
   }
 
 }
