@@ -4,18 +4,13 @@ import faculty.project.configuration.ConfigXML;
 import faculty.project.domain.*;
 import faculty.project.exceptions.UnknownUser;
 
-
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
 import java.util.*;
 
 /**
  * Implements the Data Access utility to the objectDb database
  */
 public class DataAccess {
-
+/*
   protected EntityManager db;
   protected EntityManagerFactory emf;
 
@@ -143,6 +138,7 @@ public class DataAccess {
     return students;
 
   }
+*/
 
   /**
    * Add the grade (if passed -> update the earnedCredits value of the student)
@@ -154,6 +150,8 @@ public class DataAccess {
    * @param teacher
    * @return successfully updated
    */
+
+  /*
   public boolean gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
     // maybe we should update the grade in the AcademicRecord inside a transaction...
 
@@ -264,6 +262,6 @@ public class DataAccess {
 
 
   }
-
+*/
 
 }

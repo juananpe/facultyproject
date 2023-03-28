@@ -1,8 +1,8 @@
 package faculty.project.domain;
 
-import javax.persistence.Entity;
 
-@Entity
+
+
 public class AdministrativeOfficer extends User{
     Integer officeNumber;
     String corporatePhone;

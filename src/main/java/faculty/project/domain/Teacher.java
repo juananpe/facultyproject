@@ -1,17 +1,14 @@
 package faculty.project.domain;
 
-import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-@Entity
 public class Teacher extends User {
     private Integer officeNumber;
     private String corporatePhone;
 
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private List<Subject> teaches = new ArrayList<>();
 
     public Teacher(int officeNumber, String corporatePhone){
@@ -20,6 +17,8 @@ public class Teacher extends User {
 
     public Teacher(int officeNumber, String corporatePhone, String username, String password){
         super(username, password);
+        this.officeNumber = officeNumber;
+        this.corporatePhone = corporatePhone;
     }
 
     public Teacher() {
@@ -47,4 +46,11 @@ public class Teacher extends User {
     }
 
 
+    public Integer getOfficeNumber() {
+        return officeNumber;
+    }
+
+    public String getCorporatePhone() {
+        return corporatePhone;
+    }
 }

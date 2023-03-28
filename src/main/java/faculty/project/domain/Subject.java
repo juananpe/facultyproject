@@ -1,22 +1,17 @@
 package faculty.project.domain;
 
-import javax.persistence.*;
 import java.util.Collection;
 
-@Entity
+
 public class Subject {
-    @Id
-    @GeneratedValue
     private Long id;
 
     private String name;
     private int numCredits;
     private int maxNumStudents;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
     private Collection<Subject> preRequisites;
 
-    @OneToOne
     private Teacher teacher;
 
     public Subject() {
@@ -84,5 +79,9 @@ public class Subject {
             "name='" + name + '\'' +
             ", teacher=" + teacher +
             '}';
+    }
+
+    public int getMaxStudents() {
+        return maxNumStudents;
     }
 }

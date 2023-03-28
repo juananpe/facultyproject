@@ -1,15 +1,29 @@
 package faculty.project.domain;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
-@Entity
 public class User {
-    @Id
-    @GeneratedValue
+
     private Long id;
+
+    public String getPassword() {
+        return password;
+    }
+
+    public String getCompleteName() {
+        return completeName;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
 
     private String userName;
     private String password;
@@ -54,5 +68,7 @@ public class User {
     public User() {
 
     }
+
+
 
 }

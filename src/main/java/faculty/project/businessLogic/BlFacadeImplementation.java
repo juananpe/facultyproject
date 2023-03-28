@@ -1,7 +1,8 @@
 package faculty.project.businessLogic;
 
+import faculty.project.configuration.Config;
 import faculty.project.configuration.ConfigXML;
-import faculty.project.dataAccess.DataAccess;
+import faculty.project.dataAccess.DbAccessManager;
 import faculty.project.domain.Student;
 import faculty.project.domain.Subject;
 import faculty.project.domain.Teacher;
@@ -13,19 +14,20 @@ import java.util.List;
 
 public class BlFacadeImplementation implements BlFacade {
 
-  DataAccess dbManager;
-  ConfigXML config = ConfigXML.getInstance();
+  DbAccessManager dbManager;
+  Config config = Config.getInstance();
 
   private User currentUser;
 
   public BlFacadeImplementation() {
 
+    dbManager = DbAccessManager.getInstance();
+
     System.out.println("Creating BlFacadeImplementation instance");
     boolean initialize = config.getDataBaseOpenMode().equals("initialize");
-    dbManager = new DataAccess(initialize);
-    if (initialize)
+    if (initialize) {
       dbManager.initializeDB();
-    dbManager.close();
+    }
 
     // hardcode current user for testing purposes
     try {
@@ -35,7 +37,6 @@ public class BlFacadeImplementation implements BlFacade {
     }
 
   }
-
 
   @Override
   public void consultStudentsRecords() {
