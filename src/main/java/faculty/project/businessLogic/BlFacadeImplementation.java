@@ -43,9 +43,12 @@ public class BlFacadeImplementation implements BlFacade {
     return ok;
   }
 
+  /***
+   * for each subject, reset the 'enrolledIn' association for this year's students
+   */
   @Override
   public void restartSystem() {
-    // for each subject, reset the 'enrolledIn' association for this year's students
+    // TBD
   }
 
   @Override
@@ -97,22 +100,15 @@ public class BlFacadeImplementation implements BlFacade {
     dbManager.close();
   }
 
+  /***
+   * Checks if a student is eligible to enroll in a subject.
+   * @param subject
+   * @return boolean
+   */
   @Override
   public boolean isEligible(Subject subject) {
-
-    boolean eligible;
-    Student currentStudent = (Student)currentUser;
-    dbManager.open();
-    eligible = !dbManager.isFull(subject);
-    Collection<Subject> prereq = subject.getPreRequisites();
-    prereq.add(subject); // we want to check not only if the student has passed the prerequisites but also if s/he has passed the actual subject before!
-    for (Subject sub : prereq) {
-      eligible = eligible && dbManager.hasPassed(sub, currentStudent);
-    }
-    int tcr = subject.getCreditNumber(); // total credits
-    eligible = eligible && currentStudent.isEligibleForCredits(tcr);
-    dbManager.close();
-
+    // TBD
+    boolean eligible = false;
     return eligible;
   }
 
