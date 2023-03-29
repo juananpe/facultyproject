@@ -1,7 +1,6 @@
 package faculty.project.businessLogic;
 
 import faculty.project.configuration.Config;
-import faculty.project.configuration.ConfigXML;
 import faculty.project.dataAccess.DbAccessManager;
 import faculty.project.domain.Student;
 import faculty.project.domain.Subject;

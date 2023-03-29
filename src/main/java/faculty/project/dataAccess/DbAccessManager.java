@@ -167,7 +167,6 @@ public class DbAccessManager {
 
 
     public void storeTeacher(Teacher teacher) {
-
         String sql = "INSERT INTO user (dni, username, password, completeName, email, address, phoneNumber, officeNumber, corporatePhone, type) VALUES(?,?,?,?,?,?,?,?,?,'teacher')";
         try (PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setInt(1, teacher.getDni());
@@ -183,30 +182,15 @@ public class DbAccessManager {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-
     }
 
     public List<Teacher> removeTeachingAssignments() {
+        // TBD
         return null;
-//
-//        TypedQuery<Teacher> query = db.createQuery("SELECT t FROM Teacher t",
-//                Teacher.class);
-//        List<Teacher> teachers = query.getResultList();
-//        for (Teacher teacher : teachers) {
-//            db.getTransaction().begin();
-//            teacher.clearSubjects();
-//            db.getTransaction().commit();
-//        }
-//
-//        return teachers;
     }
 
     public List<Subject> getAllSubjects() {
-//        TypedQuery<Subject> query = db.createQuery("SELECT s FROM Subject s",
-//                Subject.class);
-//        List<Subject> subjects = query.getResultList();
-//        return subjects;
-
+        // TBD
         return null;
     }
 
@@ -305,71 +289,22 @@ public class DbAccessManager {
      * @return successfully updated
      */
     public boolean gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
-        // maybe we should update the grade in the AcademicRecord inside a transaction...
-//
-//        boolean ok = true;
-//
-//        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-//
-//        TypedQuery<AcademicRecord> query = db.createQuery("UPDATE AcademicRecord ar SET ar.grade=?1, ar.signedBy=?2 WHERE ar.student=?3 AND ar.year =?4 AND ar.subject=?5",
-//                AcademicRecord.class);
-//
-//        query.setParameter(1, grade);
-//        query.setParameter(2, teacher);
-//        query.setParameter(3, student);
-//        query.setParameter(4, currentYear);
-//        query.setParameter(5, subject);
-//
-//        db.getTransaction().begin();
-//        int updateCount = query.executeUpdate();
-//        if (updateCount == 1) {
-//            if (grade >= 5) {
-//                Student st = db.find(Student.class, student.getId());
-//                // update the earnedCredits value of the student
-//                st.setEarnedCredits(student.getEarnedCredits() + subject.getCreditNumber());
-//            }
-//        } else {
-//            ok = false;
-//        }
-//        db.getTransaction().commit();
-//
-//        return ok;
-
+        // TBD
         return false;
     }
 
     public void assign(Subject subject, Teacher teacher) {
-//        db.getTransaction().begin();
-//        teacher.add(subject);
-//        db.getTransaction().commit();
+        // TBD
     }
 
     public boolean isFull(Subject subject) {
-//        TypedQuery<Long> query = db.createQuery("SELECT COUNT(ar) FROM AcademicRecord ar WHERE ar.year =?1 AND ar.subject=?2",
-//                Long.class);
-//
-//        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-//        query.setParameter(1, currentYear);
-//        query.setParameter(2, subject);
-//        Long numEnrolledStudents = query.getSingleResult();
-//        int maxNumStudents = subject.getMaxNumStudents();
-//        return numEnrolledStudents == maxNumStudents;
-
+        // TBD
         return false;
 
     }
 
     public boolean hasPassed(Subject subject, Student student) {
-        // See: https://stackoverflow.com/a/30841688/243532
-//
-//        TypedQuery<Boolean> query = db.createQuery("SELECT COUNT(ar) > 0 FROM AcademicRecord ar " +
-//                        "WHERE ar.subject=?1 AND ar.student=?2 AND ar.grade>=5",
-//                Boolean.class);
-//
-//        query.setParameter(1, subject);
-//        query.setParameter(2, student);
-//        return query.getSingleResult();
-
+        // TBD
         return false;
 
     }

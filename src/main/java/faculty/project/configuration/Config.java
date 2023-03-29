@@ -23,7 +23,6 @@ public class Config {
         try (InputStream input = new
                 FileInputStream("config.properties")) {
             prop.load(input);
-            System.out.println(prop.getProperty("db.username"));
         } catch (IOException ex) {
             ex.printStackTrace();
         }
