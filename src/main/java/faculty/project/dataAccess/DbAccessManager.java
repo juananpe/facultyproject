@@ -52,11 +52,6 @@ public class DbAccessManager {
             initializeDB();
         }
 
-        // we will use a user-defined database name later, using a config.properties file
-        // Remember, we have already seen how to deal with properties in a previous activity:
-        // https://docs.google.com/document/d/1S4nDcf-tkcDaKzYgQFO-2qLDLH_dfZISd7JUJ7N_6RI/edit?usp=sharing
-
-
     }
 
     private void truncateDB() {
@@ -286,7 +281,7 @@ public class DbAccessManager {
      * @param subject
      * @param grade
      * @param teacher
-     * @return successfully updated
+     * @return DB successfully updated
      */
     public boolean gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
         // TBD

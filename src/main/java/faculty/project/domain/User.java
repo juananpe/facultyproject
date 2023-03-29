@@ -1,7 +1,7 @@
 package faculty.project.domain;
 
 
-public class User {
+public abstract class User {
 
     private int dni;
 
