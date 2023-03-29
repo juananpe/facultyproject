@@ -14,27 +14,15 @@ import java.util.List;
 
 public class BlFacadeImplementation implements BlFacade {
 
-  DbAccessManager dbManager;
+  DbAccessManager dbManager = DbAccessManager.getInstance();
   Config config = Config.getInstance();
 
   private User currentUser;
 
   public BlFacadeImplementation() {
 
-    dbManager = DbAccessManager.getInstance();
-
     System.out.println("Creating BlFacadeImplementation instance");
-    boolean initialize = config.getDataBaseOpenMode().equals("initialize");
-    if (initialize) {
-      dbManager.initializeDB();
-    }
 
-    // hardcode current user for testing purposes
-    try {
-      login("juanan","pasahitza");
-    } catch (UnknownUser e) {
-      e.printStackTrace();
-    }
 
   }
 
@@ -78,13 +66,11 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   public void login(String username, String password) throws UnknownUser {
-    User user;
 
     dbManager.open();
-    user = dbManager.login(username, password);
+    this.currentUser = dbManager.login(username, password);
     dbManager.close();
 
-    this.currentUser = user;
   }
 
   @Override

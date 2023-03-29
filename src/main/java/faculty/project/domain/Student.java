@@ -11,8 +11,8 @@ public class Student extends User {
   private Collection<AcademicRecord> academicRecords;
 
 
-  public Student(String userName, String password, String completeName, String email, String address, String phoneNumber) {
-    super(userName, password, completeName, email, address, phoneNumber);
+  public Student(int dni, String userName, String password, String completeName, String email, String address, String phoneNumber) {
+    super(dni, userName, password, completeName, email, address, phoneNumber);
 
     academicRecords = new ArrayList<>();
   }

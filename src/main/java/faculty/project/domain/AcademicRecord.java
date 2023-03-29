@@ -11,6 +11,27 @@ public class AcademicRecord {
     private int year;
 
     private Subject subject;
+
+    public Float getGrade() {
+        return grade;
+    }
+
+    public int getYear() {
+        return year;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public Teacher getSignedBy() {
+        return signedBy;
+    }
+
     private Student student;
     private Teacher signedBy;
 

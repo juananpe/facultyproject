@@ -18,7 +18,7 @@ public class Config {
         loadConfig();
     }
 
-    public void loadConfig(){
+    private void loadConfig(){
         prop = new Properties();
         try (InputStream input = new
                 FileInputStream("config.properties")) {
@@ -32,5 +32,9 @@ public class Config {
 
     public String getDataBaseOpenMode() {
         return prop.getProperty("db.openmode");
+    }
+
+    public String getDatabaseName() {
+        return prop.getProperty("db.name");
     }
 }

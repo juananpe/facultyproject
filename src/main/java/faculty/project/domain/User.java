@@ -3,7 +3,7 @@ package faculty.project.domain;
 
 public class User {
 
-    private Long id;
+    private int dni;
 
     public String getPassword() {
         return password;
@@ -32,15 +32,16 @@ public class User {
     private String address;
     private String phoneNumber;
 
-    public Long getId() {
-        return id;
+    public int getDni() {
+        return dni;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setDni(int dni) {
+        this.dni = dni;
     }
 
-    public User(String userName, String password) {
+    public User(int dni, String userName, String password) {
+        this.dni = dni;
         this.userName = userName;
         this.password = password;
     }
@@ -48,15 +49,22 @@ public class User {
     @Override
     public String toString() {
         return "User{" +
-            "userName='" + userName + '\'' +
-            '}';
+                "dni=" + dni +
+                ", userName='" + userName + '\'' +
+                ", password='" + password + '\'' +
+                ", completeName='" + completeName + '\'' +
+                ", email='" + email + '\'' +
+                ", address='" + address + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 
     public String getUserName() {
         return userName;
     }
 
-    public User(String userName, String password, String completeName, String email, String address, String phoneNumber) {
+    public User(int dni, String userName, String password, String completeName, String email, String address, String phoneNumber) {
+        this.dni = dni;
         this.userName = userName;
         this.password = password;
         this.completeName = completeName;

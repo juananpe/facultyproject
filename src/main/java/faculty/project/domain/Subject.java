@@ -4,7 +4,7 @@ import java.util.Collection;
 
 
 public class Subject {
-    private Long id;
+    private int id;
 
     private String name;
     private int numCredits;
@@ -16,6 +16,13 @@ public class Subject {
 
     public Subject() {
 
+    }
+
+    public Subject(int id, String name, int numCredits, int maxNumStudents) {
+        this.id = id;
+        this.name = name;
+        this.numCredits = numCredits;
+        this.maxNumStudents = maxNumStudents;
     }
 
     public Teacher getTeacher() {
@@ -65,11 +72,11 @@ public class Subject {
     }
 
 
-    public Long getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(int id) {
         this.id = id;
     }
 
