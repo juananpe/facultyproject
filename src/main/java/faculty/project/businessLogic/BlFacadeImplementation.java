@@ -28,11 +28,11 @@ public class BlFacadeImplementation implements BlFacade {
     dbManager.close();
 
     // hardcode current user for testing purposes
-    try {
-      login("juanan","pasahitza");
-    } catch (UnknownUser e) {
-      e.printStackTrace();
-    }
+//    try {
+//      login("juanan","pasahitza", User.Role.Teacher);
+//    } catch (UnknownUser e) {
+//      e.printStackTrace();
+//    }
 
   }
 
@@ -61,11 +61,6 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   @Override
-  public void authenticate(String login, String password) {
-
-  }
-
-  @Override
   public List<Subject> getSubjects() {
       Teacher teacher = (Teacher) this.currentUser;
       return teacher.getSubjects();
@@ -76,11 +71,10 @@ public class BlFacadeImplementation implements BlFacade {
     this.currentUser = user;
   }
 
-  public void login(String username, String password) throws UnknownUser {
+  public void login(String username, String password, User.Role role) throws UnknownUser {
     User user;
-
     dbManager.open();
-    user = dbManager.login(username, password);
+    user = dbManager.login(username, password, role);
     dbManager.close();
 
     this.currentUser = user;

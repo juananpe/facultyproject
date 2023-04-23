@@ -5,6 +5,11 @@ import jakarta.persistence.*;
 @MappedSuperclass
 public class User {
 
+    // create a java enum type with teacher, student, admin
+    public enum Role {
+        Teacher, Student, Officer
+    }
+
     @Id
     private String userName;
 

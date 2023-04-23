@@ -11,6 +11,7 @@ import org.kordamp.bootstrapfx.BootstrapFX;
 import faculty.project.uicontrollers.*;
 
 import java.io.IOException;
+import java.lang.reflect.Constructor;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
@@ -52,20 +53,18 @@ public class MainGUI {
     FXMLLoader loader = new FXMLLoader(MainGUI.class.getResource(fxmlfile) /*, ResourceBundle.getBundle("Etiquetas", Locale.getDefault())*/ );
     loader.setControllerFactory(controllerClass -> {
 
-      if (controllerClass == GradingController.class) {
-        return new GradingController(businessLogic);
-      }  else {
-        // default behavior for controllerFactory:
-        try {
-          return controllerClass.getDeclaredConstructor().newInstance();
-        } catch (Exception exc) {
-          exc.printStackTrace();
-          throw new RuntimeException(exc); // fatal, just bail...
-        }
+      try {
+        Constructor<?> cons = controllerClass.getConstructor(BlFacade.class);
+        // Return a new instance of the controller
+        return cons.newInstance(businessLogic);
 
+      } catch (Exception exc) {
+        exc.printStackTrace();
+        throw new RuntimeException(exc); // fatal, just bail...
       }
 
     });
+
     window.ui = loader.load();
     ((Controller) loader.getController()).setMainApp(this);
     window.c = loader.getController();
@@ -77,16 +76,19 @@ public class MainGUI {
     this.stage = stage;
 
     loginWin = load("/login.fxml");
-    gradingWin = load("/grading.fxml");
 
-    showGrading();
+    showLogin();
 
   }
 
   public void showLogin(){
     setupScene(loginWin.ui, "Login", 480, 320);
   }
-  public void showGrading(){
+  public void showGrading() throws IOException {
+
+    if (gradingWin==null)
+        gradingWin = load("/grading.fxml");
+
     setupScene(gradingWin.ui, "Grading", 520, 420);
   }
 

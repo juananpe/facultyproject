@@ -23,17 +23,26 @@ public class TestDB {
     @BeforeEach
     public void setUp() {
         dbManager = new DataAccess();
-        dbManager.initializeDB();
     }
+
 
     @AfterEach
     public void tearDown() {
+        dbManager.reset();
         dbManager.close();
     }
 
     @Test
-    public void testDB() {
+    public void testReset() {
+        dbManager.reset();
+        List<Student> students = dbManager.getAllStudents();
+        assertThat(students.size()).isEqualTo(0);
+    }
 
+
+        @Test
+    public void testDB() {
+        dbManager.initializeDB();
         List<Student> students = dbManager.getAllStudents();
         System.out.println("Students: " + students);
         assertThat(students.size()).isGreaterThan(0);

@@ -1,16 +1,25 @@
 package faculty.project.controllers;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import faculty.project.businessLogic.BlFacade;
+import faculty.project.domain.User;
+import faculty.project.exceptions.UnknownUser;
 import faculty.project.ui.MainGUI;
 import faculty.project.uicontrollers.Controller;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 
 public class LoginController implements Controller {
+
+        private final BlFacade bl;
 
         @FXML
         private TextField login;
@@ -18,6 +27,8 @@ public class LoginController implements Controller {
         @FXML
         private PasswordField password;
 
+        @FXML
+        private ComboBox<User.Role> roles;
 
         @FXML
         private ResourceBundle resources;
@@ -28,17 +39,36 @@ public class LoginController implements Controller {
 
         @FXML
         void onClick(ActionEvent event) {
-                System.out.println(login.getText());
-                System.out.println(password.getText());
+
+                if (login.getText() == null
+                || password.getText() == null ||
+                 roles.getValue() == null)
+                        return;
+
+                try {
+                        bl.login(login.getText(), password.getText(), roles.getValue());
+                        mainGUI.showGrading();
+                } catch (UnknownUser unknownUser) {
+                        System.out.println("Unknown user");
+                } catch (IOException e) {
+                        throw new RuntimeException(e);
+                }
+
         }
 
         @FXML
         void initialize() {
-
+                ObservableList<User.Role> options = FXCollections.observableArrayList(
+                        User.Role.values());
+                roles.setItems(options);
         }
 
         @Override
         public void setMainApp(MainGUI mainGUI) {
                 this.mainGUI = mainGUI;
+        }
+
+        public LoginController(BlFacade bl) {
+                this.bl = bl;
         }
 }

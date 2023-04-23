@@ -30,6 +30,8 @@ public class DataAccess {
 
   public void initializeDB() {
 
+    this.reset();
+
     db.getTransaction().begin();
 
     Student oihane = new Student("Oihane", "123456", "Oihane Soraluze",
@@ -129,12 +131,18 @@ public class DataAccess {
   }
 
 
-  public User login(String username, String password) throws UnknownUser {
-    TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.userName =?1 AND u.password =?2",
+  public User login(String username, String password, User.Role role) throws UnknownUser {
+    User user;
+    TypedQuery<User> query = db.createQuery("SELECT u FROM "+ role + " u WHERE u.userName =?1 AND u.password =?2",
         User.class);
     query.setParameter(1, username);
     query.setParameter(2, password);
-    User user = query.getSingleResult();
+    try {
+      user = query.getSingleResult();
+    } catch (Exception e) {
+      throw new UnknownUser();
+    }
+
     return user;
   }
 
@@ -227,6 +235,14 @@ public class DataAccess {
 
   }
 
+  public void reset(){
+    db.getTransaction().begin();
+    db.createQuery("DELETE FROM AcademicRecord").executeUpdate();
+    db.createQuery("DELETE FROM Subject").executeUpdate();
+    db.createQuery("DELETE FROM Student").executeUpdate();
+    db.createQuery("DELETE FROM Teacher").executeUpdate();
+    db.getTransaction().commit();
+  }
 
   public void enrol(Student currentStudent, Subject subject) {
     db.getTransaction().begin();

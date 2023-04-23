@@ -24,14 +24,13 @@ public interface BlFacade {
 
   /**
    *  User ***/
-  void authenticate(String login, String password);
+  void login(String login, String password, User.Role role) throws UnknownUser;
 
   /**
    * Get subjects for current teacher
    */
   List<Subject> getSubjects();
   void setCurrentUser(User user);
-  void login(String username, String password) throws UnknownUser;
 
   List<Student> getUngradedStudentsEnrolledIn(Subject subject);
 
