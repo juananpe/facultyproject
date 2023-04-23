@@ -14,17 +14,12 @@ import java.util.List;
 
 public class TestDB {
 
-    // Referenced property not a (One|Many)ToOne:
-    // faculty.project.domain.Teacher.userName in mappedBy of faculty.project.domain.Subject.teacher
-
-
     DataAccess dbManager;
 
     @BeforeEach
     public void setUp() {
         dbManager = new DataAccess();
     }
-
 
     @AfterEach
     public void tearDown() {
@@ -40,7 +35,7 @@ public class TestDB {
     }
 
 
-        @Test
+    @Test
     public void testDB() {
         dbManager.initializeDB();
         List<Student> students = dbManager.getAllStudents();
@@ -52,8 +47,4 @@ public class TestDB {
         assertThat(subjects.size()).isGreaterThan(0);
 
     }
-
-
-
-
 }
