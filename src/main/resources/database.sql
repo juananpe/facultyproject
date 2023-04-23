@@ -17,6 +17,20 @@ create table "Student"
         primary key (USERNAME)
 );
 
+create table "Teacher"
+(
+    USERNAME       CHARACTER VARYING not null,
+    PASSWORD       CHARACTER VARYING,
+    EMAIL          INTEGER,
+    ADDRESS        CHARACTER VARYING,
+    COMPLETENAME   CHARACTER VARYING,
+    PHONENUMBER    CHARACTER VARYING,
+    CORPORATEPHONE CHARACTER VARYING,
+    OFFICENUMBER   INTEGER,
+    constraint "Teacher_pk"
+        primary key (USERNAME)
+);
+
 create table "Subject"
 (
     NAME           CHARACTER VARYING not null,
@@ -24,7 +38,9 @@ create table "Subject"
     MAXNUMSTUDENTS INTEGER,
     NUMCREDITS     INTEGER,
     constraint "SUBJECT_pk"
-        primary key (NAME)
+        primary key (NAME),
+    constraint "Subject_Teacher_USERNAME_fk"
+        foreign key (TEACHER) references "Teacher"
 );
 
 create table "AcademicRecord"
@@ -41,18 +57,6 @@ create table "AcademicRecord"
         foreign key (STUDENT) references "Student",
     constraint ACADEMICRECORD_SUBJECT_NAME_FK
         foreign key (SUBJECT) references "Subject"
-);
-
-create table "Teacher"
-(
-    USERNAME       CHARACTER VARYING,
-    PASSWORD       CHARACTER VARYING,
-    EMAIL          INTEGER,
-    ADDRESS        CHARACTER VARYING,
-    COMPLETENAME   CHARACTER VARYING,
-    PHONENUMBER    CHARACTER VARYING,
-    CORPORATEPHONE CHARACTER VARYING,
-    OFFICENUMBER   INTEGER
 );
 
 create table "User"
