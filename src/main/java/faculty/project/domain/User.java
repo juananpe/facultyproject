@@ -3,7 +3,7 @@ package faculty.project.domain;
 import jakarta.persistence.*;
 
 @MappedSuperclass
-public class User {
+public abstract class User {
 
     // create a java enum type with teacher, student, admin
     public enum Role {
