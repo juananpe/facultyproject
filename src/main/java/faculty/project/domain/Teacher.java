@@ -1,17 +1,19 @@
 package faculty.project.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
 @Entity
+@Table(name = "\"Teacher\"")
 public class Teacher extends User {
     private Integer officeNumber;
     private String corporatePhone;
 
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "teacher")
     private List<Subject> teaches = new ArrayList<>();
 
     public Teacher(int officeNumber, String corporatePhone){

@@ -1,8 +1,10 @@
 package faculty.project.domain;
 
-import javax.persistence.Entity;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Table;
 
 @Entity
+@Table(name = "\"AdministrativeOfficer\"")
 public class AdministrativeOfficer extends User{
     Integer officeNumber;
     String corporatePhone;

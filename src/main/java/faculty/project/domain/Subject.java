@@ -1,22 +1,23 @@
 package faculty.project.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.Collection;
 
 @Entity
+@Table(name = "\"Subject\"")
 public class Subject {
     @Id
-    @GeneratedValue
-    private Long id;
-
     private String name;
     private int numCredits;
     private int maxNumStudents;
 
     @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinTable(name = "\"Prerequisites\"")
+    @JoinColumn(name = "NAME")
     private Collection<Subject> preRequisites;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinColumn(name = "teacher")
     private Teacher teacher;
 
     public Subject() {
@@ -69,14 +70,6 @@ public class Subject {
         this.preRequisites = preRequisites;
     }
 
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @Override
     public String toString() {

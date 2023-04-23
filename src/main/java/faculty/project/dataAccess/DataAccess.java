@@ -1,14 +1,17 @@
 package faculty.project.dataAccess;
 
-import faculty.project.configuration.ConfigXML;
+import faculty.project.configuration.Config;
 import faculty.project.domain.*;
 import faculty.project.exceptions.UnknownUser;
 
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
-import javax.persistence.TypedQuery;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.TypedQuery;
+import org.hibernate.boot.MetadataSources;
+import org.hibernate.boot.registry.StandardServiceRegistry;
+import org.hibernate.boot.registry.StandardServiceRegistryBuilder;
+
 import java.util.*;
 
 /**
@@ -16,21 +19,14 @@ import java.util.*;
  */
 public class DataAccess {
 
-  protected EntityManager db;
-  protected EntityManagerFactory emf;
-
-  ConfigXML config = ConfigXML.getInstance();
-
-  public DataAccess(boolean initializeMode) {
-    System.out.println("Creating DataAccess instance => isDatabaseLocal: " +
-        config.isDataAccessLocal() + " getDatabBaseOpenMode: " + config.getDataBaseOpenMode());
-    open(initializeMode);
-  }
+  private EntityManager db;
+  private EntityManagerFactory emf;
 
   public DataAccess() {
-    this(false);
-  }
 
+    this.open();
+
+  }
 
   public void initializeDB() {
 
@@ -68,27 +64,31 @@ public class DataAccess {
 
   public void open(boolean initializeMode) {
 
+    Config config = Config.getInstance();
+
     System.out.println("Opening DataAccess instance => isDatabaseLocal: " +
         config.isDataAccessLocal() + " getDatabBaseOpenMode: " + config.getDataBaseOpenMode());
 
-    String fileName = config.getDataBaseFilename();
+    String fileName = config.getDatabaseName();
     if (initializeMode) {
       fileName = fileName + ";drop";
       System.out.println("Deleting the DataBase");
     }
 
     if (config.isDataAccessLocal()) {
-      emf = Persistence.createEntityManagerFactory("objectdb:" + fileName);
-      db = emf.createEntityManager();
-    } else {
-      Map<String, String> properties = new HashMap<String, String>();
-      properties.put("javax.persistence.jdbc.user", config.getDataBaseUser());
-      properties.put("javax.persistence.jdbc.password", config.getDataBasePassword());
+      final StandardServiceRegistry registry = new StandardServiceRegistryBuilder()
+              .configure() // configures settings from hibernate.cfg.xml
+              .build();
+      try {
+        emf = new MetadataSources(registry).buildMetadata().buildSessionFactory();
+      } catch (Exception e) {
+        // The registry would be destroyed by the SessionFactory, but we had trouble building the SessionFactory
+        // so destroy it manually.
+        StandardServiceRegistryBuilder.destroy(registry);
+      }
 
-      emf = Persistence.createEntityManagerFactory("objectdb://" + config.getDataAccessNode() +
-          ":" + config.getDataAccessPort() + "/" + fileName, properties);
-
       db = emf.createEntityManager();
+      System.out.println("DataBase opened");
     }
   }
 
@@ -118,6 +118,14 @@ public class DataAccess {
         Subject.class);
     List<Subject> subjects = query.getResultList();
     return subjects;
+  }
+
+
+  public List<Student> getAllStudents() {
+    TypedQuery<Student> query = db.createQuery("SELECT s FROM Student s",
+            Student.class);
+    List<Student> students = query.getResultList();
+    return students;
   }
 
 
@@ -174,7 +182,7 @@ public class DataAccess {
     int updateCount = query.executeUpdate();
     if (updateCount == 1) {
       if (grade >= 5) {
-        Student st = db.find(Student.class, student.getId());
+        Student st = db.find(Student.class, student.getUserName());
         // update the earnedCredits value of the student
         st.setEarnedCredits(student.getEarnedCredits() + subject.getCreditNumber());
       }
@@ -226,44 +234,5 @@ public class DataAccess {
     db.persist(ar);
     db.getTransaction().commit();
   }
-
-  public static void main(String[] args) {
-    // Testing...
-    DataAccess da = new DataAccess(true);
-    da.initializeDB();
-    List<Teacher> allTeachers = da.removeTeachingAssignments();
-    List<Subject> allSubjects = da.getAllSubjects();
-
-    Subject softEng = allSubjects.get(0);
-    Teacher juanan = allTeachers.get(0);
-    da.assign(softEng, juanan);
-
-
-    try {
-      Student oihane = (Student)da.login("Oihane", "123456");
-      System.out.println("Oihane has passed SoftEng: " + da.hasPassed(softEng, oihane));
-      da.gradeStudent(oihane, softEng, 8, juanan);
-      System.out.println("Oihane has passed SoftEng: " + da.hasPassed(softEng, oihane));
-
-
-      Subject webSystems = new Subject("Web Systems", 6, 50);
-      da.db.getTransaction().begin();
-      da.db.persist(webSystems);
-      da.db.getTransaction().commit();
-
-
-      Student aitor = (Student)da.login("Aitor", "123456");
-      da.enrol(aitor, webSystems);
-      System.out.println("Aitor has passed WebSystems: " + da.hasPassed(webSystems, aitor));
-
-    } catch (UnknownUser e) {
-      e.printStackTrace();
-    }
-
-    System.out.println("Is full: " + da.isFull(softEng));
-
-
-  }
-
 
 }

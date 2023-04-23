@@ -1,6 +1,6 @@
 package faculty.project.businessLogic;
 
-import faculty.project.configuration.ConfigXML;
+import faculty.project.configuration.Config;
 import faculty.project.dataAccess.DataAccess;
 import faculty.project.domain.Student;
 import faculty.project.domain.Subject;
@@ -14,7 +14,7 @@ import java.util.List;
 public class BlFacadeImplementation implements BlFacade {
 
   DataAccess dbManager;
-  ConfigXML config = ConfigXML.getInstance();
+  Config config = Config.getInstance();
 
   private User currentUser;
 
@@ -22,7 +22,7 @@ public class BlFacadeImplementation implements BlFacade {
 
     System.out.println("Creating BlFacadeImplementation instance");
     boolean initialize = config.getDataBaseOpenMode().equals("initialize");
-    dbManager = new DataAccess(initialize);
+    dbManager = new DataAccess();
     if (initialize)
       dbManager.initializeDB();
     dbManager.close();

@@ -1,16 +1,18 @@
 package faculty.project.domain;
 
-import javax.persistence.*;
+import jakarta.persistence.*;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @Entity
+@Table(name = "\"Student\"")
 public class Student extends User {
 
   private static final int MAXCREDITSDEGREE = 255;
   private int earnedCredits = 0;
 
   @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+  @JoinColumn(name = "student")
   private Collection<AcademicRecord> academicRecords;
 
 
