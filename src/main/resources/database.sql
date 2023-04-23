@@ -1,42 +1,40 @@
--- we don't know how to generate root <with-no-name> (class Root) :(
 create table "Prerequisites"
 (
-    SUBJECT      CHARACTER VARYING not null,
-    PREREQUISITE CHARACTER VARYING not null,
-    constraint "Prerequisites_pk"
-        primary key (SUBJECT, PREREQUISITE)
+    "Subject_name"       CHARACTER VARYING not null,
+    "preRequisites_name" CHARACTER VARYING not null
 );
 
 create table "Student"
 (
-    USERNAME        CHARACTER VARYING not null,
-    PASSWORD        CHARACTER VARYING,
-    "completeName"  CHARACTER VARYING,
-    EMAIL           CHARACTER VARYING,
-    ADDRESS         CHARACTER VARYING,
-    "phoneNumber"   CHARACTER VARYING,
-    "earnedCredits" INTEGER,
+    USERNAME      CHARACTER VARYING not null,
+    PASSWORD      CHARACTER VARYING,
+    EMAIL         CHARACTER VARYING,
+    ADDRESS       CHARACTER VARYING,
+    COMPLETENAME  CHARACTER VARYING,
+    PHONENUMBER   CHARACTER VARYING,
+    EARNEDCREDITS INTEGER,
     constraint "STUDENT_pk"
         primary key (USERNAME)
 );
 
 create table "Subject"
 (
-    NAME         CHARACTER VARYING not null,
-    TEACHER      CHARACTER VARYING,
-    "numCredits" INTEGER,
+    NAME           CHARACTER VARYING not null,
+    TEACHER        CHARACTER VARYING,
+    MAXNUMSTUDENTS INTEGER,
+    NUMCREDITS     INTEGER,
     constraint "SUBJECT_pk"
         primary key (NAME)
 );
 
 create table "AcademicRecord"
 (
-    ID             INTEGER auto_increment,
-    STUDENT        CHARACTER VARYING,
-    GRADE          DOUBLE PRECISION,
-    "academicYear" INTEGER,
-    SUBJECT        CHARACTER VARYING,
-    TEACHER        CHARACTER VARYING,
+    ID           INTEGER auto_increment,
+    STUDENT      CHARACTER VARYING,
+    GRADE        DOUBLE PRECISION,
+    SUBJECT      CHARACTER VARYING,
+    TEACHER      CHARACTER VARYING,
+    ACADEMICYEAR INTEGER,
     constraint "ACADEMICRECORD_pk"
         primary key (ID),
     constraint ACADEMICRECORD_STUDENT_USERNAME_FK
@@ -47,13 +45,29 @@ create table "AcademicRecord"
 
 create table "Teacher"
 (
-    USERNAME         CHARACTER VARYING,
+    USERNAME       CHARACTER VARYING,
+    PASSWORD       CHARACTER VARYING,
+    EMAIL          INTEGER,
+    ADDRESS        CHARACTER VARYING,
+    COMPLETENAME   CHARACTER VARYING,
+    PHONENUMBER    CHARACTER VARYING,
+    CORPORATEPHONE CHARACTER VARYING,
+    OFFICENUMBER   INTEGER
+);
+
+create table "User"
+(
+    USERNAME         CHARACTER VARYING not null,
     PASSWORD         CHARACTER VARYING,
     "completeName"   CHARACTER VARYING,
-    EMAIL            INTEGER,
+    EMAIL            CHARACTER VARYING,
     ADDRESS          CHARACTER VARYING,
     "phoneNumber"    CHARACTER VARYING,
     "officeNumber"   INTEGER,
-    "corporatePhone" CHARACTER VARYING
+    "corporatePhone" CHARACTER VARYING,
+    "earnedCredits"  INTEGER,
+    TYPE             INTEGER,
+    constraint "User_pk"
+        primary key (USERNAME)
 );
 
