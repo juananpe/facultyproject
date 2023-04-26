@@ -25,6 +25,8 @@ create table "Prerequisites"
 (
     "Subject_name"       CHARACTER VARYING not null,
     "preRequisites_name" CHARACTER VARYING not null,
+    constraint "Prerequisites_pk"
+        primary key ("Subject_name", "preRequisites_name"),
     constraint "Prerequisites_Subject_Pre_fk"
         foreign key ("preRequisites_name") references "Subject",
     constraint "Prerequisites__subject_fk"
