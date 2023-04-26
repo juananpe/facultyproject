@@ -17,7 +17,7 @@ public interface BlFacade {
   /**
    * ************** Teacher *******************/
   void consultStudentsRecords();
-  boolean gradeStudent(Student student, Subject subject, float gradeValue);
+  void gradeStudent(Student student, Subject subject, float gradeValue);
   /**
    * Academic Officer ***/
   void restartSystem();

@@ -48,4 +48,7 @@ public class Student extends User {
     return getEarnedCredits() + credits <= MAXCREDITSDEGREE;
   }
 
+    public void addEarnedCredits(int creditNumber) {
+        earnedCredits += creditNumber;
+    }
 }

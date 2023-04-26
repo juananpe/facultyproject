@@ -2,6 +2,8 @@ package faculty.project.ui;
 
 import faculty.project.businessLogic.BlFacade;
 import faculty.project.controllers.GradingController;
+import faculty.project.domain.User;
+import faculty.project.exceptions.UnknownUser;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -75,13 +77,21 @@ public class MainGUI {
 
     this.stage = stage;
 
-    loginWin = load("/login.fxml");
-
-    showLogin();
+    // just for testing we are hardcoding the login
+    try {
+      businessLogic.login("juanan", "pasahitza", User.Role.Teacher);
+    } catch (UnknownUser e) {
+      throw new RuntimeException(e);
+    }
+    showGrading();
 
   }
 
-  public void showLogin(){
+  public void showLogin() throws IOException {
+
+    if (loginWin==null)
+      loginWin = load("/login.fxml");
+
     setupScene(loginWin.ui, "Login", 480, 320);
   }
   public void showGrading() throws IOException {

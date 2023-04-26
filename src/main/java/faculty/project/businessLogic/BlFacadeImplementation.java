@@ -43,16 +43,15 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   @Override
-  public boolean gradeStudent(Student student, Subject subject, float grade) {
+  public void gradeStudent(Student student, Subject subject, float grade) {
 
     Teacher teacher = (Teacher) this.currentUser;
     dbManager.open();
 
-    boolean ok = dbManager.gradeStudent(student, subject, grade, teacher);
+    dbManager.gradeStudent(student, subject, grade, teacher);
 
     dbManager.close();
 
-    return ok;
   }
 
   @Override

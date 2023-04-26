@@ -84,7 +84,10 @@ public class GradingController implements Controller {
       }
     });
 
-    comboStudents.valueProperty().addListener((obs, oldval, subject) -> {
+    comboStudents.valueProperty().addListener((obs, oldval, student) -> {
+      if (student!=null)
+        System.out.println("Selected student: " + student.getUserName());
+
       lblMessage.setText("");
       lblMessage.getStyleClass().clear();
     });
@@ -92,7 +95,7 @@ public class GradingController implements Controller {
     comboSubjects.valueProperty().addListener((obs, oldval, subject) -> {
       if(subject != null) {
         System.out.println("Selected subject: " + subject.getName());
-        // get all students enrolled in this subject
+        // get all non-graded students enrolled in this subject
         List<Student> studentList = bl.getUngradedStudentsEnrolledIn(subject);
         students.setAll(studentList);
         comboStudents.setItems(students);
@@ -119,16 +122,12 @@ public class GradingController implements Controller {
       lblMessage.setText("Some of the parameters are wrong");
       lblMessage.getStyleClass().setAll("lbl","lbl-danger");
     }else {
-      if (bl.gradeStudent(student, subject, gradeValue)) {
+        bl.gradeStudent(student, subject, gradeValue);
         students.remove(student);
         comboStudents.getSelectionModel().clearSelection();
         grade.setText("");
         lblMessage.setText("Grade Updated: " + student.getUserName() + ":" + gradeValue);
         lblMessage.getStyleClass().setAll("lbl", "lbl-success");
-      } else {
-        lblMessage.setText("Something went wrong");
-        lblMessage.getStyleClass().setAll("lbl", "lbl-danger");
-      }
     }
   }
 
