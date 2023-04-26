@@ -1,4 +1,3 @@
--- we don't know how to generate root <with-no-name> (class Root) :(
 create table "Student"
 (
     USERNAME      CHARACTER VARYING not null,
@@ -48,14 +47,13 @@ create table "Teacher"
 
 create table "AcademicRecord"
 (
-    ID           INTEGER auto_increment,
-    STUDENT      CHARACTER VARYING,
+    STUDENT      CHARACTER VARYING not null,
     GRADE        DOUBLE PRECISION,
-    SUBJECT      CHARACTER VARYING,
+    SUBJECT      CHARACTER VARYING not null,
     TEACHER      CHARACTER VARYING,
-    ACADEMICYEAR INTEGER,
-    constraint "ACADEMICRECORD_pk"
-        primary key (ID),
+    ACADEMICYEAR INTEGER           not null,
+    constraint ACADEMICRECORD_PK
+        primary key (STUDENT, ACADEMICYEAR, SUBJECT),
     constraint ACADEMICRECORD_STUDENT_USERNAME_FK
         foreign key (STUDENT) references "Student",
     constraint ACADEMICRECORD_SUBJECT_NAME_FK
