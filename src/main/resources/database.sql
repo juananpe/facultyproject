@@ -11,28 +11,6 @@ create table "Student"
         primary key (USERNAME)
 );
 
-create table "Subject"
-(
-    NAME           CHARACTER VARYING not null,
-    TEACHER        CHARACTER VARYING,
-    MAXNUMSTUDENTS INTEGER,
-    NUMCREDITS     INTEGER,
-    constraint "SUBJECT_pk"
-        primary key (NAME)
-);
-
-create table "Prerequisites"
-(
-    "Subject_name"       CHARACTER VARYING not null,
-    "preRequisites_name" CHARACTER VARYING not null,
-    constraint "Prerequisites_pk"
-        primary key ("Subject_name", "preRequisites_name"),
-    constraint "Prerequisites_Subject_Pre_fk"
-        foreign key ("preRequisites_name") references "Subject",
-    constraint "Prerequisites__subject_fk"
-        foreign key ("Subject_name") references "Subject"
-);
-
 create table "Teacher"
 (
     USERNAME       CHARACTER VARYING not null,
@@ -45,6 +23,18 @@ create table "Teacher"
     OFFICENUMBER   INTEGER,
     constraint "Teacher_pk"
         primary key (USERNAME)
+);
+
+create table "Subject"
+(
+    NAME           CHARACTER VARYING not null,
+    TEACHER        CHARACTER VARYING,
+    MAXNUMSTUDENTS INTEGER,
+    NUMCREDITS     INTEGER,
+    constraint "SUBJECT_pk"
+        primary key (NAME),
+    constraint "Subject__Teacher_fk"
+        foreign key (TEACHER) references "Teacher"
 );
 
 create table "AcademicRecord"
@@ -62,5 +52,17 @@ create table "AcademicRecord"
         foreign key (SUBJECT) references "Subject",
     constraint ACADEMICRECORD__TEACHER_FK
         foreign key (TEACHER) references "Teacher"
+);
+
+create table "Prerequisites"
+(
+    "Subject_name"       CHARACTER VARYING not null,
+    "preRequisites_name" CHARACTER VARYING not null,
+    constraint "Prerequisites_pk"
+        primary key ("Subject_name", "preRequisites_name"),
+    constraint "Prerequisites_Subject_Pre_fk"
+        foreign key ("preRequisites_name") references "Subject",
+    constraint "Prerequisites__subject_fk"
+        foreign key ("Subject_name") references "Subject"
 );
 
