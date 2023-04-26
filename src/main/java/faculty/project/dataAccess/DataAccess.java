@@ -235,4 +235,20 @@ public class DataAccess {
         db.getTransaction().commit();
     }
 
+    public User getUser(String userName, User.Role role) {
+        if (role.equals(User.Role.Student)) return db.find(Student.class, userName);
+        if (role.equals(User.Role.Teacher)) return db.find(Teacher.class, userName);
+
+        return null;
+    }
+
+    public Subject getSubject(String subjectName) {
+        Subject subject = db.find(Subject.class, subjectName);
+        return subject;
+    }
+
+    public AcademicRecord getAcademicRecord(Student student, Subject subject, int currentYear) {
+        AcademicRecord ar = db.find(AcademicRecord.class, new AcademicRecord.AcademicRecordPK(student.getUserName(), subject.getName(), currentYear));
+        return ar;
+    }
 }
