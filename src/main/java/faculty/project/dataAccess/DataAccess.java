@@ -172,8 +172,6 @@ public class DataAccess {
      */
     public void gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
 
-
-
         AcademicRecord ar = getAcademicRecord(student, subject, Calendar.getInstance().get(Calendar.YEAR));
 
             db.getTransaction().begin();

@@ -1,8 +1,6 @@
 package faculty.project.ui;
 
 import faculty.project.businessLogic.BlFacade;
-import faculty.project.controllers.GradingController;
-import faculty.project.domain.User;
 import faculty.project.exceptions.UnknownUser;
 import javafx.application.Platform;
 import javafx.fxml.FXMLLoader;
@@ -14,8 +12,6 @@ import faculty.project.uicontrollers.*;
 
 import java.io.IOException;
 import java.lang.reflect.Constructor;
-import java.util.Locale;
-import java.util.ResourceBundle;
 
 public class MainGUI {
 

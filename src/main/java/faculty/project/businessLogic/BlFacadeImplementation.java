@@ -45,13 +45,8 @@ public class BlFacadeImplementation implements BlFacade {
 
   @Override
   public void gradeStudent(Student student, Subject subject, float grade) {
-
     Teacher teacher = (Teacher) this.currentUser;
-    dbManager.open();
-
     dbManager.gradeStudent(student, subject, grade, teacher);
-
-
   }
 
   @Override
@@ -109,7 +104,6 @@ public class BlFacadeImplementation implements BlFacade {
 
     boolean eligible;
     Student currentStudent = (Student)currentUser;
-    dbManager.open();
     eligible = !dbManager.isFull(subject);
     Collection<Subject> prereq = subject.getPrerequisiteFor();
     prereq.add(subject); // we want to check not only if the student has passed the prerequisites but also if s/he has passed the actual subject before!
