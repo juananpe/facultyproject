@@ -52,9 +52,9 @@ public class TestDB {
     @Test
     public void testGradeStudent(){
         dbManager.initializeDB();
-        Student oihane = (Student) dbManager.getUser("Oihane", User.Role.Student);
+        Student oihane = (Student) dbManager.getUser("Oihane");
         Subject softEng = dbManager.getSubject("Software Engineering");
-        Teacher juanan = (Teacher) dbManager.getUser("Juanan", User.Role.Teacher);
+        Teacher juanan = (Teacher) dbManager.getUser("Juanan");
 
         dbManager.gradeStudent(oihane, softEng, 9.5F, juanan);
 

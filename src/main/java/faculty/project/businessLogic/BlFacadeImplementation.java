@@ -10,6 +10,7 @@ import faculty.project.exceptions.UnknownUser;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Set;
 
 public class BlFacadeImplementation implements BlFacade {
 
@@ -25,7 +26,7 @@ public class BlFacadeImplementation implements BlFacade {
     dbManager = new DataAccess();
     if (initialize)
       dbManager.initializeDB();
-    dbManager.close();
+
 
     // hardcode current user for testing purposes
 //    try {
@@ -50,7 +51,6 @@ public class BlFacadeImplementation implements BlFacade {
 
     dbManager.gradeStudent(student, subject, grade, teacher);
 
-    dbManager.close();
 
   }
 
@@ -60,7 +60,7 @@ public class BlFacadeImplementation implements BlFacade {
   }
 
   @Override
-  public List<Subject> getSubjects() {
+  public Set<Subject> getSubjects() {
       Teacher teacher = (Teacher) this.currentUser;
       return teacher.getSubjects();
   }
@@ -70,11 +70,11 @@ public class BlFacadeImplementation implements BlFacade {
     this.currentUser = user;
   }
 
-  public void login(String username, String password, User.Role role) throws UnknownUser {
+  public void login(String username, String password) throws UnknownUser {
     User user;
-    dbManager.open();
-    user = dbManager.login(username, password, role);
-    dbManager.close();
+
+    user = dbManager.login(username, password);
+
 
     this.currentUser = user;
   }
@@ -82,26 +82,26 @@ public class BlFacadeImplementation implements BlFacade {
   @Override
   public List<Student> getUngradedStudentsEnrolledIn(Subject subject) {
     List<Student> students;
-    dbManager.open();
+
     students = dbManager.getUngradedStudentsEnrolledIn(subject);
-    dbManager.close();
+
     return students;
   }
 
   @Override
   public List<Subject> getAllSubjects() {
     List<Subject> subjects;
-    dbManager.open();
+
     subjects = dbManager.getAllSubjects();
-    dbManager.close();
+
     return subjects;
   }
 
   @Override
   public void assign(Subject subject, Teacher teacher) {
-    dbManager.open();
+
     dbManager.assign(subject, teacher);
-    dbManager.close();
+
   }
 
   @Override
@@ -111,14 +111,14 @@ public class BlFacadeImplementation implements BlFacade {
     Student currentStudent = (Student)currentUser;
     dbManager.open();
     eligible = !dbManager.isFull(subject);
-    Collection<Subject> prereq = subject.getPreRequisites();
+    Collection<Subject> prereq = subject.getPrerequisiteFor();
     prereq.add(subject); // we want to check not only if the student has passed the prerequisites but also if s/he has passed the actual subject before!
     for (Subject sub : prereq) {
       eligible = eligible && dbManager.hasPassed(sub, currentStudent);
     }
-    int tcr = subject.getCreditNumber(); // total credits
+    int tcr = subject.getCredits();
     eligible = eligible && currentStudent.isEligibleForCredits(tcr);
-    dbManager.close();
+
 
     return eligible;
   }
@@ -126,11 +126,11 @@ public class BlFacadeImplementation implements BlFacade {
   @Override
   public void enrol(List<Subject> subjects) {
     Student currentStudent = (Student)currentUser;
-    dbManager.open();
+
     for (Subject subject : subjects) {
       dbManager.enrol(currentStudent, subject);
     }
-    dbManager.close();
+
   }
 
 }

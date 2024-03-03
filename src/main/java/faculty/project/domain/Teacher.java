@@ -2,19 +2,22 @@ package faculty.project.domain;
 
 import jakarta.persistence.*;
 import java.util.ArrayList;
-import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 
+import java.util.Set;
+
 @Entity
-@Table(name = "\"Teacher\"")
+@DiscriminatorValue("TEACHER")
 public class Teacher extends User {
-    private Integer officeNumber;
     private String corporatePhone;
+    private String officeNumber;
 
+    @OneToMany(mappedBy = "teacher")
+    private Set<Subject> teaches = new HashSet<>();
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "teacher")
-    private List<Subject> teaches = new ArrayList<>();
+    @OneToMany(mappedBy = "signedBy")
+    private Set<AcademicRecord> academicRecords = new HashSet<>();
 
     public Teacher(int officeNumber, String corporatePhone){
         super();
@@ -28,7 +31,7 @@ public class Teacher extends User {
 
     }
 
-    public List<Subject> getSubjects() {
+    public Set<Subject> getSubjects() {
         return teaches;
     }
 
@@ -38,8 +41,8 @@ public class Teacher extends User {
     }
 
 
-    public List<Subject> clearSubjects(){
-        List<Subject> subjects = new ArrayList<>();
+    public Set<Subject> clearSubjects(){
+        Set<Subject> subjects = new HashSet<>();
         for (Subject subject : teaches) {
             subject.setTeacher(null);
             subjects.add(subject);

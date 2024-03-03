@@ -79,7 +79,7 @@ public class MainGUI {
 
     // just for testing we are hardcoding the login
     try {
-      businessLogic.login("juanan", "pasahitza", User.Role.Teacher);
+      businessLogic.login("juanan", "pasahitza");
     } catch (UnknownUser e) {
       throw new RuntimeException(e);
     }

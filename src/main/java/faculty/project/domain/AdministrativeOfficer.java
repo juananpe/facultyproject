@@ -1,11 +1,10 @@
 package faculty.project.domain;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
-@Table(name = "\"AdministrativeOfficer\"")
-public class AdministrativeOfficer extends User{
+@DiscriminatorValue("ADMINISTRATIVE_OFFICER")
+public class AdministrativeOfficer extends User {
     Integer officeNumber;
     String corporatePhone;
 

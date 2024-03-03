@@ -7,6 +7,7 @@ import faculty.project.exceptions.UnknownUser;
 
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.EntityManagerFactory;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.TypedQuery;
 import org.hibernate.boot.MetadataSources;
 import org.hibernate.boot.registry.StandardServiceRegistry;
@@ -40,19 +41,19 @@ public class DataAccess {
         Student aitor = new Student("Aitor", "123456", "Aitor Sarriegi",
                 "aitor@email.com", "c/ Esperanza 14", "678999999");
 
+        Teacher juanan = new Teacher(230, "+34-123456", "juanan", "pasahitza");
+
         Subject softwareEngineering = new Subject("Software Engineering", 6, 50);
 
+        db.persist(oihane);
+        db.persist(aitor);
+        db.persist(softwareEngineering);
+        db.persist(juanan);
+
+        juanan.add(softwareEngineering);
         oihane.enroll(softwareEngineering);
         aitor.enroll(softwareEngineering);
 
-
-        Teacher juanan = new Teacher(230, "+34-123456", "juanan", "pasahitza");
-        juanan.add(softwareEngineering);
-
-        db.persist(softwareEngineering);
-        db.persist(oihane);
-        db.persist(aitor);
-        db.persist(juanan);
 
         db.getTransaction().commit();
         System.out.println("The database has been initialized");
@@ -131,9 +132,9 @@ public class DataAccess {
     }
 
 
-    public User login(String username, String password, User.Role role) throws UnknownUser {
+    public User login(String username, String password) throws UnknownUser {
         User user;
-        TypedQuery<User> query = db.createQuery("SELECT u FROM " + role + " u WHERE u.userName =?1 AND u.password =?2",
+        TypedQuery<User> query = db.createQuery("SELECT u FROM User u WHERE u.userName =?1 AND u.password =?2",
                 User.class);
         query.setParameter(1, username);
         query.setParameter(2, password);
@@ -151,7 +152,7 @@ public class DataAccess {
 
         List<Student> students;
         TypedQuery<Student> query = db.createQuery(
-                "SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.year =?2 AND ar.signedBy is null",
+                "SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.academicYear =?2 AND ar.signedBy is null",
                 Student.class);
         query.setParameter(1, subject);
         query.setParameter(2, currentYear);
@@ -171,19 +172,19 @@ public class DataAccess {
      */
     public void gradeStudent(Student student, Subject subject, float grade, Teacher teacher) {
 
-        int currentYear = Calendar.getInstance().get(Calendar.YEAR);
 
-        AcademicRecord ar = db.find(AcademicRecord.class, new AcademicRecord.AcademicRecordPK(student.getUserName(), subject.getName(), currentYear));
 
-        db.getTransaction().begin();
-        ar.setGrade(grade);
-        ar.setSignedBy(teacher);
+        AcademicRecord ar = getAcademicRecord(student, subject, Calendar.getInstance().get(Calendar.YEAR));
 
-        if (grade >= 5) {
-            student.addEarnedCredits(subject.getCreditNumber());
-        }
+            db.getTransaction().begin();
+            ar.setGrade(grade);
+            ar.setSignedBy(teacher);
 
-        db.getTransaction().commit();
+            if (grade >= 5) {
+                student.addEarnedCredits(subject.getCredits());
+            }
+
+            db.getTransaction().commit();
 
     }
 
@@ -194,14 +195,14 @@ public class DataAccess {
     }
 
     public boolean isFull(Subject subject) {
-        TypedQuery<Long> query = db.createQuery("SELECT COUNT(ar) FROM AcademicRecord ar WHERE ar.year =?1 AND ar.subject=?2",
+        TypedQuery<Long> query = db.createQuery("SELECT COUNT(ar) FROM AcademicRecord ar WHERE ar.academicYear =?1 AND ar.subject=?2",
                 Long.class);
 
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
         query.setParameter(1, currentYear);
         query.setParameter(2, subject);
         Long numEnrolledStudents = query.getSingleResult();
-        int maxNumStudents = subject.getMaxNumStudents();
+        int maxNumStudents = subject.getMaximumStudentNumber();
         return numEnrolledStudents == maxNumStudents;
 
     }
@@ -231,15 +232,19 @@ public class DataAccess {
     public void enrol(Student currentStudent, Subject subject) {
         db.getTransaction().begin();
         AcademicRecord ar = new AcademicRecord(subject, currentStudent);
-        db.persist(ar);
+            db.persist(ar);
         db.getTransaction().commit();
     }
 
-    public User getUser(String userName, User.Role role) {
-        if (role.equals(User.Role.Student)) return db.find(Student.class, userName);
-        if (role.equals(User.Role.Teacher)) return db.find(Teacher.class, userName);
-
-        return null;
+    public User getUser(String username) {
+        try {
+            TypedQuery<User> query = db.createQuery(
+                    "SELECT u FROM User u WHERE u.userName = :username", User.class);
+            query.setParameter("username", username);
+            return query.getSingleResult();
+        } catch (jakarta.persistence.NoResultException e) {
+            return null; // Or handle it in another appropriate way
+        }
     }
 
     public Subject getSubject(String subjectName) {
@@ -248,7 +253,20 @@ public class DataAccess {
     }
 
     public AcademicRecord getAcademicRecord(Student student, Subject subject, int currentYear) {
-        AcademicRecord ar = db.find(AcademicRecord.class, new AcademicRecord.AcademicRecordPK(student.getUserName(), subject.getName(), currentYear));
-        return ar;
+        try {
+            TypedQuery<AcademicRecord> query = db.createQuery(
+                    "SELECT ar FROM AcademicRecord ar " +
+                            "JOIN ar.student s " +
+                            "JOIN ar.subject sub " +
+                            "WHERE s.userName = :username AND sub.name = :subjectName AND ar.academicYear = :year", AcademicRecord.class);
+            query.setParameter("username", student.getUserName());
+            query.setParameter("subjectName", subject.getName());
+            query.setParameter("year", currentYear);
+
+            return query.getSingleResult();
+        } catch (NoResultException e) {
+            System.out.println("No record found for student " + student.getUserName() + " in subject " + subject.getName() + " for year " + currentYear);
+            return null;
+        }
     }
 }

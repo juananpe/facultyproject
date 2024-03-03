@@ -1,41 +1,55 @@
 package faculty.project.domain;
 
 import jakarta.persistence.*;
-import java.util.Collection;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
-@Table(name = "\"Subject\"")
 public class Subject {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
     private String name;
-    private int numCredits;
-    private int maxNumStudents;
+    private Integer credits;
+    private Integer maximumStudentNumber;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinTable(name = "\"Prerequisites\"")
-    @JoinColumn(name = "NAME")
-    private Collection<Subject> preRequisites;
+    @ManyToMany
+    @JoinTable(
+            name = "subject_prerequisites",
+            joinColumns = @JoinColumn(name = "subject_id"),
+            inverseJoinColumns = @JoinColumn(name = "prerequisite_id")
+    )
+    private Set<Subject> prerequisites = new HashSet<>();
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "teacher")
+    @ManyToMany(mappedBy = "prerequisites")
+    private Set<Subject> prerequisiteFor = new HashSet<>();
+
+    @OneToMany(mappedBy = "subject")
+    private Set<AcademicRecord> academicRecords = new HashSet<>();
+
+    @ManyToOne
+    @JoinColumn(name = "teacher_id")
     private Teacher teacher;
 
-    public Subject() {
-
-    }
-
-    public Teacher getTeacher() {
-        return teacher;
-    }
-
-    public void setTeacher(Teacher teacher) {
-        this.teacher = teacher;
-    }
-
-    public Subject(String name, int numCredits, int maxNumStudents) {
+    // Constructors
+    // Parameterized constructor
+    public Subject(String name, Integer credits, Integer maximumStudentNumber) {
         this.name = name;
-        this.numCredits = numCredits;
-        this.maxNumStudents = maxNumStudents;
+        this.credits = credits;
+        this.maximumStudentNumber = maximumStudentNumber;
+    }
+
+    public Subject() {
+    }
+
+    // Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getName() {
@@ -46,36 +60,51 @@ public class Subject {
         this.name = name;
     }
 
-    public int getCreditNumber() {
-        return numCredits;
+    public Integer getCredits() {
+        return credits;
     }
 
-    public void setNumCredits(int numCredits) {
-        this.numCredits = numCredits;
+    public void setCredits(Integer credits) {
+        this.credits = credits;
     }
 
-    public int getMaxNumStudents() {
-        return maxNumStudents;
+    public Integer getMaximumStudentNumber() {
+        return maximumStudentNumber;
     }
 
-    public void setMaxNumStudents(int maxNumStudents) {
-        this.maxNumStudents = maxNumStudents;
+    public void setMaximumStudentNumber(Integer maximumStudentNumber) {
+        this.maximumStudentNumber = maximumStudentNumber;
     }
 
-    public Collection<Subject> getPreRequisites() {
-        return preRequisites;
+    public Set<Subject> getPrerequisites() {
+        return prerequisites;
     }
 
-    public void setPreRequisites(Collection<Subject> preRequisites) {
-        this.preRequisites = preRequisites;
+    public void setPrerequisites(Set<Subject> prerequisites) {
+        this.prerequisites = prerequisites;
     }
 
+    public Set<Subject> getPrerequisiteFor() {
+        return prerequisiteFor;
+    }
 
-    @Override
-    public String toString() {
-        return "Subject{" +
-            "name='" + name + '\'' +
-            ", teacher=" + teacher +
-            '}';
+    public void setPrerequisiteFor(Set<Subject> prerequisiteFor) {
+        this.prerequisiteFor = prerequisiteFor;
+    }
+
+    public Set<AcademicRecord> getAcademicRecords() {
+        return academicRecords;
+    }
+
+    public void setAcademicRecords(Set<AcademicRecord> academicRecords) {
+        this.academicRecords = academicRecords;
+    }
+
+    public Teacher getTeacher() {
+        return teacher;
+    }
+
+    public void setTeacher(Teacher teacher) {
+        this.teacher = teacher;
     }
 }

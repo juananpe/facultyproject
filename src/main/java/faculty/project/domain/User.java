@@ -2,22 +2,22 @@ package faculty.project.domain;
 
 import jakarta.persistence.*;
 
-@MappedSuperclass
+@Entity
+@Inheritance(strategy = InheritanceType.SINGLE_TABLE)
+@Table(name = "USERS") // Renames the table to avoid using a reserved keyword
+@DiscriminatorColumn(name = "USER_TYPE", discriminatorType = DiscriminatorType.STRING)
 public abstract class User {
 
-    // create a java enum type with teacher, student, admin
-    public enum Role {
-        Teacher, Student, Officer
-    }
-
     @Id
-    private String userName;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
+    private String userName;
     private String password;
-    private String completeName;
+    private String fullName;
     private String email;
     private String address;
-    private String phoneNumber;
+    private String personalPhone;
 
     public void setUserName(String userName) {
         this.userName = userName;
@@ -31,12 +31,12 @@ public abstract class User {
         this.password = password;
     }
 
-    public String getCompleteName() {
-        return completeName;
+    public String getFullName() {
+        return fullName;
     }
 
-    public void setCompleteName(String completeName) {
-        this.completeName = completeName;
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
     }
 
     public String getEmail() {
@@ -55,12 +55,12 @@ public abstract class User {
         this.address = address;
     }
 
-    public String getPhoneNumber() {
-        return phoneNumber;
+    public String getPersonalPhone() {
+        return personalPhone;
     }
 
-    public void setPhoneNumber(String phoneNumber) {
-        this.phoneNumber = phoneNumber;
+    public void setPersonalPhone(String personalPhone) {
+        this.personalPhone = personalPhone;
     }
 
     public User(String userName, String password) {
@@ -79,13 +79,13 @@ public abstract class User {
         return userName;
     }
 
-    public User(String userName, String password, String completeName, String email, String address, String phoneNumber) {
+    public User(String userName, String password, String fullName, String email, String address, String personalPhone) {
         this.userName = userName;
         this.password = password;
-        this.completeName = completeName;
+        this.fullName = fullName;
         this.email = email;
         this.address = address;
-        this.phoneNumber = phoneNumber;
+        this.personalPhone = personalPhone;
     }
 
     public User() {

@@ -28,7 +28,7 @@ public class LoginController implements Controller {
         private PasswordField password;
 
         @FXML
-        private ComboBox<User.Role> roles;
+        private ComboBox<String> roles;
 
         @FXML
         private ResourceBundle resources;
@@ -46,7 +46,7 @@ public class LoginController implements Controller {
                         return;
 
                 try {
-                        bl.login(login.getText(), password.getText(), roles.getValue());
+                        bl.login(login.getText(), password.getText());
                         mainGUI.showGrading();
                 } catch (UnknownUser unknownUser) {
                         System.out.println("Unknown user");
@@ -58,8 +58,7 @@ public class LoginController implements Controller {
 
         @FXML
         void initialize() {
-                ObservableList<User.Role> options = FXCollections.observableArrayList(
-                        User.Role.values());
+                ObservableList<String> options = FXCollections.observableArrayList("Teacher", "Student");
                 roles.setItems(options);
         }
 

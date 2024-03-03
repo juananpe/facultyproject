@@ -2,38 +2,59 @@ package faculty.project.domain;
 
 import jakarta.persistence.*;
 
-import java.io.Serializable;
 import java.util.Calendar;
-import java.util.Objects;
 
 @Entity
-@Table(name = "\"AcademicRecord\"")
-@IdClass(AcademicRecord.AcademicRecordPK.class)
-public class AcademicRecord implements Serializable {
+@Table(name = "ACADEMICRECORD")
+public class AcademicRecord {
 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     private Float grade;
 
-    @Id
-    @Column(name = "ACADEMICYEAR")
-    private int year;
+    @Column(name = "ACADEMIC_YEAR") // Renaming 'year' to 'academicYear'
+    private Integer academicYear;
 
-    @Id
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "subject")
+    @ManyToOne
+    @JoinColumn(name = "SUBJECT_ID", nullable = false)
     private Subject subject;
 
-    @Id
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "student")
+    @ManyToOne
+    @JoinColumn(name = "STUDENT_ID", nullable = false)
     private Student student;
 
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "teacher")
+    @ManyToOne
+    @JoinColumn(name = "TEACHER_ID")
     private Teacher signedBy;
 
+    // Default constructor
     public AcademicRecord() {
+    }
 
+    public AcademicRecord(Subject subject, Student student) {
+        this.subject = subject;
+        this.student = student;
+        this.academicYear = Calendar.getInstance().get(Calendar.YEAR);
+    }
+    // Constructor with all fields
+    public AcademicRecord(Float grade, int year, Subject subject, Student student, Teacher signedBy) {
+        this.grade = grade;
+        this.academicYear = year;
+        this.subject = subject;
+        this.student = student;
+        this.signedBy = signedBy;
+    }
+
+    // Getters and Setters
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public Float getGrade() {
@@ -44,6 +65,30 @@ public class AcademicRecord implements Serializable {
         this.grade = grade;
     }
 
+    public int getYear() {
+        return academicYear;
+    }
+
+    public void setYear(int year) {
+        this.academicYear = year;
+    }
+
+    public Subject getSubject() {
+        return subject;
+    }
+
+    public void setSubject(Subject subject) {
+        this.subject = subject;
+    }
+
+    public Student getStudent() {
+        return student;
+    }
+
+    public void setStudent(Student student) {
+        this.student = student;
+    }
+
     public Teacher getSignedBy() {
         return signedBy;
     }
@@ -51,47 +96,4 @@ public class AcademicRecord implements Serializable {
     public void setSignedBy(Teacher signedBy) {
         this.signedBy = signedBy;
     }
-
-    public AcademicRecord(Subject subject, Student student) {
-        this.subject = subject;
-        this.student = student;
-        year = Calendar.getInstance().get(Calendar.YEAR);
-    }
-
-
-    public static class AcademicRecordPK implements Serializable {
-        private String student;
-        private String subject;
-        private int year;
-
-        public AcademicRecordPK() {
-        }
-
-        public AcademicRecordPK(String student, String subject, int year) {
-            this.student = student;
-            this.subject = subject;
-            this.year = year;
-        }
-
-        @Override
-        public boolean equals(Object o) {
-            if (this == o) return true;
-            if (o == null || getClass() != o.getClass()) return false;
-
-            AcademicRecordPK that = (AcademicRecordPK) o;
-
-            if (year != that.year) return false;
-            if (!Objects.equals(student, that.student)) return false;
-            return Objects.equals(subject, that.subject);
-        }
-
-        @Override
-        public int hashCode() {
-            int result = student != null ? student.hashCode() : 0;
-            result = 31 * result + (subject != null ? subject.hashCode() : 0);
-            result = 31 * result + year;
-            return result;
-        }
-    }
-
 }

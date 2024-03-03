@@ -8,6 +8,7 @@ import faculty.project.domain.User;
 import faculty.project.exceptions.UnknownUser;
 
 import java.util.List;
+import java.util.Set;
 
 /**
  * Interface that specifies the business logic.
@@ -24,12 +25,12 @@ public interface BlFacade {
 
   /**
    *  User ***/
-  void login(String login, String password, User.Role role) throws UnknownUser;
+  void login(String login, String password) throws UnknownUser;
 
   /**
    * Get subjects for current teacher
    */
-  List<Subject> getSubjects();
+  Set<Subject> getSubjects();
   void setCurrentUser(User user);
 
   List<Student> getUngradedStudentsEnrolledIn(Subject subject);
