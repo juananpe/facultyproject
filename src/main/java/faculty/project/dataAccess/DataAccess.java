@@ -152,7 +152,9 @@ public class DataAccess {
 
         List<Student> students;
         TypedQuery<Student> query = db.createQuery(
-                "SELECT ar.student FROM AcademicRecord ar WHERE ar.subject =?1 AND ar.academicYear =?2 AND ar.signedBy is null",
+                "SELECT ar.student " +
+                        " FROM AcademicRecord ar " +
+                        " WHERE ar.subject =?1 AND ar.academicYear =?2 AND ar.signedBy is null",
                 Student.class);
         query.setParameter(1, subject);
         query.setParameter(2, currentYear);
