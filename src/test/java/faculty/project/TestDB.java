@@ -52,15 +52,15 @@ public class TestDB {
     @Test
     public void testGradeStudent(){
         dbManager.initializeDB();
-        Student oihane = (Student) dbManager.getUser("Oihane");
+        Student ane = (Student) dbManager.getUser("Ane");
         Subject softEng = dbManager.getSubject("Software Engineering");
         Teacher juanan = (Teacher) dbManager.getUser("Juanan");
 
-        dbManager.gradeStudent(oihane, softEng, 9.5F, juanan);
+        dbManager.gradeStudent(ane, softEng, 9.5F, juanan);
 
         // get current year as int
         int currentYear = Calendar.getInstance().get(Calendar.YEAR);
-        AcademicRecord ar = dbManager.getAcademicRecord(oihane, softEng, currentYear);
+        AcademicRecord ar = dbManager.getAcademicRecord(ane, softEng, currentYear);
 
         assertThat(ar.getGrade()).isEqualTo(9.5F);
     }

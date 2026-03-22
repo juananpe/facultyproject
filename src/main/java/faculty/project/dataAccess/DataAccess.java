@@ -35,8 +35,8 @@ public class DataAccess {
 
         db.getTransaction().begin();
 
-        Student oihane = new Student("Oihane", "123456", "Oihane Soraluze",
-                "oihane@email.com", "c/ Melancolía 13", "678012345");
+        Student ane = new Student("Ane", "123456", "Ane Soraluze",
+                "ane@email.com", "c/ Melancolía 13", "678012345");
 
         Student aitor = new Student("Aitor", "123456", "Aitor Sarriegi",
                 "aitor@email.com", "c/ Esperanza 14", "678999999");
@@ -45,13 +45,13 @@ public class DataAccess {
 
         Subject softwareEngineering = new Subject("Software Engineering", 6, 50);
 
-        db.persist(oihane);
+        db.persist(ane);
         db.persist(aitor);
         db.persist(softwareEngineering);
         db.persist(juanan);
 
         juanan.add(softwareEngineering);
-        oihane.enroll(softwareEngineering);
+        ane.enroll(softwareEngineering);
         aitor.enroll(softwareEngineering);
 
 
